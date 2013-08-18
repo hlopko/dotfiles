@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+if ARGV.size == 0
+  puts "Usage"
+	puts "rewrap_mts_to_mp4 <infile> <outfile>"
+else
+  puts "INFILE: #{ARGV[0]}"
+  puts "OUTFILE: #{ARGV[1]}"
+	`ffmbc -i #{ARGV[0]} -vcodec copy -strict experimental #{ARGV[1]}`
+end

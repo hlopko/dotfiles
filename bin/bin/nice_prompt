@@ -1,0 +1,70 @@
+autoload -U colors && colors
+setopt PROMPT_SUBST
+
+YELLOW="%{$fg[yellow]%}"
+RED="%{$fg[red]%}"
+GRAY="%{$fg[gray]%}"
+GREEN="%{$fg[green]%}"
+NORMAL="%{$reset_color%}"
+
+local SMILEY="%(?.$YELLOW:)$NORMAL.$RED:($NORMAL)"
+local CURRENT_PATH="$GRAY%3c$NORMAL"
+
+PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(svn_prompt) '
+
+function __update_prompt_vars {
+	git_prompt
+	svn_prompt
+}
+
+function svn_prompt {
+	if `svn info > /dev/null 2>&1`; then
+		local REVISION=`svn info | awk '/Revision/{print $2}'` 
+		echo "$GREEN""[r$REVISION]""$NORMAL"
+	fi
+}
+
+function git_prompt {
+	if `git status > /dev/null 2>&1`; then
+		local MINUTES=`nice_minutes`
+		local BRANCH=`git rev-parse --abbrev-ref HEAD`
+		echo "$GREEN($BRANCH|$MINUTES$GREEN)$NORMAL"
+	fi
+}
+
+function nice_minutes {
+	local MINUTES=`minutes`
+	local MINUTES_HR=`minutesHR`
+	if [ "$MINUTES" -gt 30 ]; then
+		local COLOR=$RED
+	elif [ "$MINUTES" -gt 10 ]; then
+		local COLOR=$YELLOW
+	else
+		local COLOR=$GREEN
+	fi
+	echo "$COLOR$MINUTES_HR"
+}
+
+function minutesHR {
+	local mins=`minutes`
+	local hours=$((mins/60))
+	local days=$((hours/24))
+	if [ $mins -lt 100 ]; then 
+		echo "${mins}m"
+	elif [ $hours -lt 72 ]; then 
+		echo "${hours}h"
+	else
+		echo "${days}d"
+	fi
+}
+
+function minutes {
+    local now=`date +%s`
+    local last_commit=`git log --pretty=format:'%at' -1`
+    local seconds=$((now-last_commit))
+	local mins=$((seconds/60))
+	echo $mins
+}
+
+
+

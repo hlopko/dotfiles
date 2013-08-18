@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd "/home/m/.wine/drive_c/Program Files (x86)/GOG.com/Jagged Alliance - Deadly Games"
+dosbox -conf dosboxjadg.conf

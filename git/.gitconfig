@@ -1,0 +1,55 @@
+[user]
+	name = Marcel Hlopko
+	email = marcel.hlopko@gmail.com
+[github]
+	user = mhlopko
+[color]
+	ui = auto
+[push]
+	default = upstream
+[alias]
+	whoami = log -1 --pretty=%B
+	co = checkout
+	br = branch
+	c = commit
+	ca = commit -a
+	s = status
+	b = branch
+	di = diff
+	dc = diff --cached
+	aa = add --all
+	ai = add -i
+	ap = add -p
+	ff = merge --ff-only
+	noff = merge --no--ff
+	l = log --graph --abbrev-commit --date=relative --remotes
+	la = !git l --all
+	div = divergence
+	gn = goodness
+	gnc = goodness --cached
+	fa = fetch --all
+	pom = push origin master
+	ds = diff --stat=160,120
+	zip = archive --format zip --output
+[mergetool "fugitive"]
+	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+[merge]
+	tool = fugitive
+	confictstyle = diff3
+[format]
+	pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+[blame]
+	;date=local
+[branch]
+	autosetuprebase = always
+[credential]
+	helper = cache --timeout=3600
+[git-up "bundler"]
+	check = true
+	autoinstall = true
+[git-up "fetch"]
+	all = true
+[mergetool]
+	keepBackup = false
+[core]
+	pager = less -F -X

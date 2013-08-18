@@ -1,0 +1,13 @@
+[ui]
+username = Marcel Hlopko <marcel.hlopko@gmail.com>
+editor = vim
+
+[pager]
+pager = LESS='FRX' less
+
+[extensions]
+mercurial_keyring = 
+color = 
+graphlog = 
+pager =
+
