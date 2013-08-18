@@ -83,11 +83,13 @@ set ts=4 sts=4 sw=4 noexpandtab
 ",l to show unprintable characters
 nmap <leader>l :set list!<CR>
 
-"set nice chars for tabs and eols
-set lcs=tab:▸\ ,eol:⤦
-
 "set encoding to utf8
 set encoding=utf-8
+
+"set nice chars for tabs and eols
+if has("multi_byte")
+	set lcs=tab:▸\ ,eol:⤦
+endif
 
 "show at least 6 lines before and after cursor pos
 set scrolloff=6
@@ -357,7 +359,9 @@ let g:tagbar_width=26
 nmap <leader>m TagbarToggle<cr>
 
 "cool statusline
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+if exists("*fugitive#statusline")
+	set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+endif
 
 "hide all fugitive buffers so we dont have to close them manually
 autocmd BufReadPost fugitive://* set bufhidden=delete
