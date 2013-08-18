@@ -66,6 +66,7 @@ if has("autocmd")
   au BufNewFile,BufRead *.json setfiletype javascript
   au BufNewFile,BufRead *.js setfiletype javascript
   au BufNewFile,BufRead *.prolog setfiletype prolog
+  au BufNewFile,BufRead *.pp setfiletype puppet
   au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Guardfile,config.ru}    set ft=ruby
   au BufRead,BufNewFile {*.less}    set ft=css
 endif

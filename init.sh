@@ -2,7 +2,7 @@
 
 hash stow 2>/dev/null || { echo >&2 "I require stow but it's not installed.  Aborting."; exit 1; }
 
-packages=( ack bash bin gdb git hg other ruby screen tmux vim zsh )
+packages=( ack bash bin gdb git hg ruby screen tmux vim zsh )
 
 if [[ $1 = "clean" ]]; then
 	ARGS="-D"
