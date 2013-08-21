@@ -26,6 +26,7 @@ Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-repeat'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-surround'
+Bundle 'michaeljsmith/vim-indent-object'
 
 let mapleader = ","
 set backupdir=/tmp
@@ -155,6 +156,9 @@ set wrap
 set textwidth=60
 set formatoptions=qrn1
 
+"set min width of window
+set winwidth=80
+
 "left right switch tabs
 nnoremap <left> :tabprev<cr>
 nnoremap <right> :tabnext<cr>
@@ -264,8 +268,8 @@ nnoremap <leader>W :call <SID>StripTrailingWhitespaces()<CR>
 "reselect just pasted text
 nnoremap <leader>v V`]
 
-"go back to normal mode with kk 
-inoremap kk <ESC>
+"go back to normal mode with kj 
+inoremap kj <ESC>
 
 "save file :)
 nnoremap WW :w<cr>
