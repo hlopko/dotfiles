@@ -20,6 +20,7 @@ done
 
 if [[ ! $1 = "clean" ]]; then
 	if [[ ! $1 = "fast" ]]; then
+		rvm use system
 		vim +BundleInstall +qall
 		cd ~/.vim/bundle/command-t/ruby/command-t && ruby extconf.rb && make
 	fi
