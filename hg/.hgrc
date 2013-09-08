@@ -10,4 +10,4 @@ mercurial_keyring =
 color = 
 graphlog = 
 pager =
-
+mq = 

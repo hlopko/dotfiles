@@ -424,6 +424,7 @@ map <S-F7> :set complete-=k<CR>
 
 "ignore whitespace changes in diff
 set diffopt+=iwhite
+set diffexpr=""
 
 "disable folding for markdown
 let g:vim_markdown_folding_disabled=1

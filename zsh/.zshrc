@@ -62,6 +62,7 @@ alias dcommit_and_back='git co master && git merge working && git svn dcommit &&
 alias brake='bundle exec rake'
 alias sails='spring rails'
 alias sake='spring rake'
+alias wim='cd /home/m/w; vim index.md'
 
 if [ -d $HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk ]; then
   PATH=$PATH:$HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk #add stx binary to path
