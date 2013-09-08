@@ -2,11 +2,11 @@
 
 set -e
 
-apt_packages="screen ruby ruby-dev"
+apt_packages="xstow tree screen ruby ruby-dev"
 
 sudo apt-get install -y $apt_packages
 
-hash xstow 2>/dev/null || { echo >&2 "I require stow but it's not installed.  Aborting."; exit 1; }
+echo "Done installing packages"
 
 packages_to_be_linked=( bash bin gdb git hg ruby screen tmux vim zsh )
 
@@ -16,18 +16,22 @@ else
 	ARGS="-f"
 fi
 
-
 for package in "${packages_to_be_linked[@]}"
 do
 	xstow $ARGS $package
 done
 
+echo "Done symlinking"
+
 if [[ ! $1 = "clean" ]]; then
 	if [[ ! $1 = "fast" ]]; then
 		hash rvm 2>/dev/null && rvm use system
 		screen -D -m vim -X +BundleInstall +qall
-		cd ~/.vim/bundle/command-t/ruby/command-t && ruby extconf.rb && make
+		echo "Done installing vim plugins"
+		cd ~/.vim/bundle/command-t/ruby/command-t 
+		ruby extconf.rb 
+		make
 	fi
 fi
 
-
+echo "Done initializing dotfiles"

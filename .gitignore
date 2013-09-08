@@ -20,4 +20,7 @@ vim/.vim/bundle/vim-rails/
 vim/.vim/bundle/vim-repeat/
 vim/.vim/bundle/vim-ruby/
 vim/.vim/bundle/vim-surround/
+vim/.vim/bundle/ctrlp.vim/
+vim/.vim/bundle/syntastic/
+vim/.vim/bundle/vim-indent-object/
 vim/.vim/bundle/vim-unimpaired/

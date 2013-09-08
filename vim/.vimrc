@@ -27,6 +27,8 @@ Bundle 'tpope/vim-repeat'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-surround'
 Bundle 'michaeljsmith/vim-indent-object'
+Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/syntastic'
 
 let mapleader = ","
 set backupdir=/tmp
