@@ -2,9 +2,13 @@
 
 set -e
 
+apt_packages="ruby ruby-dev"
+
+sudo apt-get install -y $apt_packages
+
 hash xstow 2>/dev/null || { echo >&2 "I require stow but it's not installed.  Aborting."; exit 1; }
 
-packages=( bash bin gdb git hg ruby screen tmux vim zsh )
+packages_to_be_linked=( bash bin gdb git hg ruby screen tmux vim zsh )
 
 if [[ $1 = "clean" ]]; then
 	ARGS="-D"
@@ -13,7 +17,7 @@ else
 fi
 
 
-for package in "${packages[@]}"
+for package in "${packages_to_be_linked[@]}"
 do
 	xstow $ARGS $package
 done
