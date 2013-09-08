@@ -2,7 +2,7 @@
 
 set -e
 
-apt_packages="ruby ruby-dev"
+apt_packages="screen ruby ruby-dev"
 
 sudo apt-get install -y $apt_packages
 
@@ -25,7 +25,7 @@ done
 if [[ ! $1 = "clean" ]]; then
 	if [[ ! $1 = "fast" ]]; then
 		rvm use system
-		vim +BundleInstall +qall
+		screen -D -m vim -X +BundleInstall +qall
 		cd ~/.vim/bundle/command-t/ruby/command-t && ruby extconf.rb && make
 	fi
 fi
