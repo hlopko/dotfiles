@@ -1,0 +1,20 @@
+#! /usr/bin/env ruby
+
+require 'uri'
+require 'cgi'
+
+full_path = ARGV[0]
+
+if full_path
+  full_path = full_path.gsub("mvim://open?url=", "")
+  file_path = full_path.gsub(/&.*$/, "")
+  query_params = full_path.gsub(/^.*&/, "")
+  params = CGI::parse(query_params)
+  line = params["line"][0]
+
+  vim_params = file_path
+
+  vim_params << " +#{line}" if line
+end
+
+`gnome-terminal -x vim #{vim_params}`
