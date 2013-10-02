@@ -11,24 +11,22 @@ Bundle 'vim-scripts/AutoTag'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'tpope/vim-fugitive'
 Bundle 'nathanaelkane/vim-indent-guides'
-Bundle 'tsaleh/vim-matchit'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 Bundle 'puppetlabs/puppet-syntax-vim'
 Bundle 'tpope/vim-ragtag'
 Bundle 'SirVer/ultisnips'
 Bundle 'tpope/vim-unimpaired'
-Bundle 'tpope/vim-bundler'
 Bundle 'tpope/vim-endwise'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'plasticboy/vim-markdown'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'tpope/vim-bundler'
+Bundle 'tpope/vim-rake'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-repeat'
-Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-surround'
 Bundle 'michaeljsmith/vim-indent-object'
-Bundle 'kien/ctrlp.vim'
-Bundle 'scrooloose/syntastic'
 
 let mapleader = ","
 set backupdir=/tmp
@@ -72,6 +70,8 @@ if has("autocmd")
   au BufNewFile,BufRead *.pp setfiletype puppet
   au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Guardfile,config.ru}    set ft=ruby
   au BufRead,BufNewFile {*.less}    set ft=css
+
+  au FileType ruby,eruby UltiSnipsAddFiletypes rails.ruby
 endif
 
 "we dont need to be compatible with vi
@@ -122,7 +122,8 @@ set backspace=indent,eol,start
 "always show status
 set laststatus=2
 
-"show relative instead of absolute line numbers
+"show both absolute and relative line numbers
+set number
 set relativenumber
 
 "ignore case on search
@@ -150,8 +151,8 @@ nnoremap <leader><space> :noh<cr>
 map <leader>y "+y
 
 "tab will work for bracket matching
-nnoremap <tab> %
-vnoremap <tab> %
+nmap <tab> %
+vmap <tab> %
 
 "break long lines
 set wrap
@@ -436,3 +437,18 @@ let NERDTreeHijackNetrw=1
 
 "delete current buffer file
 command DeleteCurrentFile call delete(expand('%')) | bdelete!
+
+"enable matchit macros
+runtime macros/matchit.vim
+
+"command - t hacks for rails
+map <leader>gv :CommandTFlush<cr>\|:CommandT app/views<cr>
+map <leader>gc :CommandTFlush<cr>\|:CommandT app/controllers<cr>
+map <leader>gm :CommandTFlush<cr>\|:CommandT app/models<cr>
+map <leader>gh :CommandTFlush<cr>\|:CommandT app/helpers<cr>
+map <leader>gl :CommandTFlush<cr>\|:CommandT app/lib<cr>
+
+" Set ultisnips triggers
+let g:UltiSnipsExpandTrigger="<tab>"                                            
+let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"   

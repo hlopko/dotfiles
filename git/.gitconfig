@@ -31,11 +31,50 @@
 	pom = push origin master
 	ds = diff --stat=160,120
 	zip = archive --format zip --output
+	# Get the current branch name (not so useful in itself, but used in
+	# other aliases)
+	branch-name = "!git rev-parse --abbrev-ref HEAD"
+	# Push the current branch to the remote "origin", and set it to track
+	# the upstream branch
+	publish = "!git push -u origin $(git branch-name)"
+	# Delete the remote version of the current branch
+	unpublish = "!git push origin :$(git branch-name)"
+	# Fire up your difftool (e.g. Kaleidescope) with all the changes that
+	# are on the current branch.
+	code-review = difftool origin/master...
+	# Unstage any files that have been added to the staging area
+	unstage = reset HEAD
+	# Show changes that have been staged
+	diffc = diff --cached
+
+	# Checkout our version of a file and add it
+	ours = "!f() { git checkout --ours $@ && git add $@; }; f"
+	# Checkout their version of a file and add it
+	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+
+	# Delete any branches that have been merged into master
+	delete-merged-branches = "!git co master && git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
+	# diff current HEAD against master (this is what you want 90% of the time if you work in topic branches)
+	compare = diff HEAD..master --
+	# list git bins (lots of gems in there)
+	bin = !find $(git --exec-path) -type f | xargs basename | $(git config --get core.pager)
+	ctags = !.git/hooks/ctags
+	serve = !git daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
 [mergetool "fugitive"]
 	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+[diff "ruby"]
+	funcname = "^ *\\(\\(def\\) .*\\)"
 [merge]
 	tool = fugitive
 	confictstyle = diff3
+	summary = true
+[merge "bundle"]
+	name = bundle
+	driver = bundle
+[merge "railsschema"]
+	name = newer Rails schema version
+	driver = hookup resolve-schema %A %O %B %L
 [format]
 	pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
 [blame]
@@ -53,3 +92,8 @@
 	keepBackup = false
 [core]
 	pager = less -F -X
+	whitespace = trailing-space,space-before-tab
+[init]
+	templatedir = ~/.git_template
+[interactive]
+	singlekey = true

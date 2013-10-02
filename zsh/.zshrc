@@ -63,6 +63,8 @@ alias brake='bundle exec rake'
 alias sails='spring rails'
 alias sake='spring rake'
 alias wim='cd /home/m/w; vim index.md'
+alias solarized_light='/home/m/Projects/clones/gnome-terminal-colors-solarized/set_light.sh'
+alias solarized_dark='/home/m/Projects/clones/gnome-terminal-colors-solarized/set_dark.sh'
 
 if [ -d $HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk ]; then
   PATH=$PATH:$HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk #add stx binary to path
@@ -122,4 +124,11 @@ zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
 
 ### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
+export PATH="/usr/local/heroku/bin:/usr/lib/go/bin:$PATH"
+
+export RUBY_GC_MALLOC_LIMIT=1000000000
+export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1.25
+export RUBY_HEAP_MIN_SLOTS=800000
+export RUBY_FREE_MIN=600000
+
+export RI="--format ansi --width 70"
