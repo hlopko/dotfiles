@@ -5,6 +5,10 @@ editor = vim
 [pager]
 pager = LESS='FRX' less
 
+[auth]
+bb.prefix = https://bitbucket.org
+bb.username = mhlopko
+
 [extensions]
 mercurial_keyring = 
 color = 

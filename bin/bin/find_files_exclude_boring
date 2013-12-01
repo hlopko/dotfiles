@@ -1,0 +1,11 @@
+#!/bin/bash
+
+find * -type f \
+	-and -not -path 'tmp*' \
+	-and -not -path 'cache*' \
+	-and -not -path 'vendor*' \
+	-and -not -path 'db/migrate*' \
+	-and -not -path 'log*' \
+	-and -not -path '*.keep' \
+	-and -not -path 'java/target*' \
+	-and -not -path 'java/doc*'

@@ -11,7 +11,6 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 
-alias tmux="TERM=screen-256color-bce tmux"
 asend() { send "$*" && mplayer '/home/m/apps/consider_it_done.mp3'; }
 
 
@@ -19,6 +18,7 @@ send() { notify-send -i '/home/m/.send_img.png' "$*" "$(eval "$*" 2>/dev/null | 
 send-fail() { notify-send -i '/home/m/.send_fail_img.png' "$*" "$(eval "$*" 2>/dev/null | tail -4)"; }
 
 
+alias tmux="TERM=screen-256color-bce tmux"
 alias locate='locate -i'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -42,29 +42,34 @@ alias sd='svn diff --diff-cmd=/home/m/apps/svn-diff-meld'
 alias dstx='cd ~/Projects/stx/jv-branch/'
 alias dlibrun='dstx; cd build/stx/librun'
 alias dstc='dstx; cd build/stx/stc'
-alias dblog='cd /home/m/Projects/writings/mhlopko.github.com'
 alias stx='/home/m/Projects/stx/jv-branch/build/stx/projects/smalltalk/smalltalk -I --quick'
-alias update_stx='dstc; svn update; make; dlibrun; svn update; make; dstx; svn update; brake update compile'
 alias dlibjava='dstx; cd build/stx/libjava'
-alias dthesis='cd /home/m/Projects/thesis/latex'
-alias desug12='cd /home/m/Projects/writings/libjava-ESUG2012'
-alias dreload='cd /home/m/Projects/writings/reloading_for_wapl2013'
-alias drails='cd /home/m/Projects/ruby/'
 alias dgplus='cd /home/m/Projects/ruby/gplus/'
-alias dlibjava2='cd /home/m/Projects/stx/libjava/branches/jk_new_structure'
-alias cssh.bonus='ssh marcel@bonus.tiscali.cz'
-alias cssh.shared='ssh marcel@shared.city4web.cz -p 22443'
-alias cssh.swing='ssh hlopkmar@swing.fit.cvut.cz'
-alias cssh.develop='ssh marcel@develop.city4web.cz -p 22443'
-alias cssh.albumplus='ssh albumplus_cz@83.167.247.210 -p 22443'
+alias dhotelline='cd /home/m/Projects/ruby/hotelline/'
 alias a='ack-grep'
-alias dcommit_and_back='git co master && git merge working && git svn dcommit && git co working && git rebase master'
 alias brake='bundle exec rake'
 alias sails='spring rails'
 alias sake='spring rake'
 alias wim='cd /home/m/w; vim index.md'
 alias solarized_light='/home/m/Projects/clones/gnome-terminal-colors-solarized/set_light.sh'
 alias solarized_dark='/home/m/Projects/clones/gnome-terminal-colors-solarized/set_dark.sh'
+alias s='git s'
+alias f='fg'
+alias e='exit'
+alias v='vim'
+alias a='git add -p'
+alias c='git c'
+alias gl='git pull'
+alias gp='git push'
+alias pp='git pull && git push'
+alias dbooster='cd ~/Projects/java/bbooster'
+alias drbooster='cd ~/Projects/ruby/booster'
+alias ddevfest='cd ~/Projects/writing/devfest_talk'
+alias what_i_do='tail -n 2000 ~/.zsh_history | cut -d ";" -f 2 | awk "{print $1 $2}" | sort | uniq -c | sort -n'
+alias logs.booster="ssh bwnet 'tail -f /var/log/bbooster/bbooster-trace-logfile.log'"
+alias logs.booster.beta="ssh bwnet 'tail -f /var/log/bbooster/bbooster-beta-trace-logfile.log'"
+alias logs.less.booster="ssh bwnet 'less /var/log/bbooster/bbooster-trace-logfile.log'"
+alias logs.less.booster.beta="ssh bwnet 'less /var/log/bbooster/bbooster-beta-trace-logfile.log'"
 
 if [ -d $HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk ]; then
   PATH=$PATH:$HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk #add stx binary to path
@@ -125,10 +130,5 @@ bindkey '\C-x\C-e' edit-command-line
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:/usr/lib/go/bin:$PATH"
-
-export RUBY_GC_MALLOC_LIMIT=1000000000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1.25
-export RUBY_HEAP_MIN_SLOTS=800000
-export RUBY_FREE_MIN=600000
 
 export RI="--format ansi --width 70"

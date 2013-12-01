@@ -5,8 +5,6 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
 
-filetype plugin indent on     " required!
-Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'vim-scripts/AutoTag'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'tpope/vim-fugitive'
@@ -15,18 +13,28 @@ Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 Bundle 'puppetlabs/puppet-syntax-vim'
 Bundle 'tpope/vim-ragtag'
-Bundle 'SirVer/ultisnips'
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle 'garbas/snipmate.vim'
+Bundle "honza/vim-snippets"
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-endwise'
 Bundle 'airblade/vim-gitgutter'
-Bundle 'plasticboy/vim-markdown'
+Bundle 'tpope/vim-markdown'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-bundler'
 Bundle 'tpope/vim-rake'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-rvm'
 Bundle 'michaeljsmith/vim-indent-object'
+Bundle 'nelstrom/vim-visual-star-search'
+Bundle 'thoughtbot/vim-rspec'
+Bundle 'ecomba/vim-ruby-refactoring'
+Bundle 'bronson/vim-trailing-whitespace'
+
+filetype plugin indent on     " required!
 
 let mapleader = ","
 set backupdir=/tmp
@@ -47,31 +55,28 @@ colorscheme solarized
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal g'\"" | endif
-   
+
   " Syntax of these languages is fussy over tabs Vs spaces
   au FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
   au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-   
+
   " Customisations based on house-style (arbitrary)
-  au FileType html,css,lisp,ruby,eruby setlocal ts=2 sts=2 sw=2 expandtab
+  au FileType html,css,lisp,ruby,eruby,coffee setlocal ts=2 sts=2 sw=2 expandtab
   au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
   au FileType c,cpp,java setlocal ts=4 sts=4 sw=4 expandtab
 
-  au BufNewFile,BufRead *.rss setfiletype xml
-  au BufNewFile,BufRead *.md setfiletype markdown
-  au BufNewFile,BufRead *.stx setfiletype st
-  au BufNewFile,BufRead *.stx_test setfiletype st
-  au BufNewFile,BufRead *.lisp setfiletype lisp
-  au BufNewFile,BufRead *.rb setfiletype ruby
-  au BufNewFile,BufRead *.task setfiletype ruby
-  au BufNewFile,BufRead *.json setfiletype javascript
-  au BufNewFile,BufRead *.js setfiletype javascript
-  au BufNewFile,BufRead *.prolog setfiletype prolog
-  au BufNewFile,BufRead *.pp setfiletype puppet
-  au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Guardfile,config.ru}    set ft=ruby
-  au BufRead,BufNewFile {*.less}    set ft=css
-
-  au FileType ruby,eruby UltiSnipsAddFiletypes rails.ruby
+  au BufNew,BufNewFile *.rss setfiletype xml
+  au BufNew,BufNewFile *.txt,*.text,*.md,*.markdown set ft=markdown
+  au BufNew,BufNewFile *.stx setfiletype st
+  au BufNew,BufNewFile *.stx_test setfiletype st
+  au BufNew,BufNewFile *.lisp setfiletype lisp
+  au BufNew,BufNewFile *.task setfiletype ruby
+  au BufNew,BufNewFile *.json setfiletype javascript
+  au BufNew,BufNewFile *.js setfiletype javascript
+  au BufNew,BufNewFile *.prolog setfiletype prolog
+  au BufNew,BufNewFile *.pp setfiletype puppet
+  au BufNew,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Guardfile,config.ru} set ft=ruby
+  au BufNew,BufNewFile {*.less} set ft=css
 endif
 
 "we dont need to be compatible with vi
@@ -103,10 +108,10 @@ set autoindent
 "show info on in which mode you're in
 set showmode
 
-"show partial command 
+"show partial command
 set showcmd
 
-"hide hidden buffers (on :q! for example) 
+"hide hidden buffers (on :q! for example)
 set hidden
 
 "complete commands on tab
@@ -151,8 +156,14 @@ nnoremap <leader><space> :noh<cr>
 map <leader>y "+y
 
 "tab will work for bracket matching
-nmap <tab> %
-vmap <tab> %
+"nmap <tab> %
+"vmap <tab> %
+
+"switch between last two files
+nnoremap <leader><leader> <C-^>
+
+"write to file requiring sudo
+cmap w!! %!sudo tee > /dev/null %
 
 "break long lines
 set wrap
@@ -183,10 +194,42 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-"Command-T
-" Open files with <leader>f
-map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
-let g:CommandTAcceptSelectionSplitMap=['<C-g>']
+""""""""""""""""""""""""""""""""""""""""""""""""""""""gary bernhardt's rename awesomeness
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+map <Leader>n :call RenameFile()<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""gary bernhardt's selecta awesomeness
+" Run a given vim command on the results of fuzzy selecting from a given shell
+" command. See usage below.
+function! SelectaCommand(choice_command, selecta_args, vim_command)
+  try
+    silent let selection = system(a:choice_command . " | selecta " . a:selecta_args)
+  catch /Vim:Interrupt/
+    " Swallow the ^C so that the redraw below happens; otherwise there will be
+    " leftovers from selecta on the screen
+    redraw!
+    return
+  endtry
+  redraw!
+  exec a:vim_command . " " . selection
+endfunction
+
+" Find all files in all non-dot directories starting in the working directory.
+" Fuzzy select one of those. Open the selected file with :e.
+nnoremap <leader>f :call SelectaCommand("find_files_exclude_boring", "", ":e")<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""end  gary bernhardt's selecta awesomeness
+"""""""""""""""""""""""""""""""""""""""""""""""""start mh's selecta awesomeness
+nnoremap <leader>o :call SelectaCommand("cut -d$'\t' -f 1 .git/tags", "", ":tag")<cr>
+"""""""""""""""""""""""""""""""""""""""""""""""""""end mh's selecta awesomeness
 "ignore some files
 set wildignore+=*.o,*.obj,.git,.svn,public,tmp,app/assets/images
 
@@ -227,7 +270,7 @@ function! SetTestFile()
     let t:grb_test_file=@%
 endfunction
 
-command StopSpring !spring stop	
+command StopSpring !spring stop
 
 function! RunTests(filename)
     " Write the file and run tests for the given filename
@@ -253,25 +296,10 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""end of gb awesomeness
 
-function! <SID>StripTrailingWhitespaces()
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    %s/\s\+$//e
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
-
-"strip all trailing spaces in file to \W
-nnoremap <leader>W :call <SID>StripTrailingWhitespaces()<CR>
-
 "reselect just pasted text
 nnoremap <leader>v V`]
 
-"go back to normal mode with kj 
+"go back to normal mode with kj
 inoremap kj <ESC>
 
 "save file :)
@@ -284,8 +312,9 @@ nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 
 "window resizing
-map + <C-W>+
-map - <C-W>>
+map + <C-W>>
+map _ <C-W><
+map - <C-W>+
 
 "deselect search
 nnoremap <leader><space> :noh<cr>
@@ -441,14 +470,73 @@ command DeleteCurrentFile call delete(expand('%')) | bdelete!
 "enable matchit macros
 runtime macros/matchit.vim
 
-"command - t hacks for rails
-map <leader>gv :CommandTFlush<cr>\|:CommandT app/views<cr>
-map <leader>gc :CommandTFlush<cr>\|:CommandT app/controllers<cr>
-map <leader>gm :CommandTFlush<cr>\|:CommandT app/models<cr>
-map <leader>gh :CommandTFlush<cr>\|:CommandT app/helpers<cr>
-map <leader>gl :CommandTFlush<cr>\|:CommandT app/lib<cr>
+"remap Q to leader so we dont go to ed mode accidentally
+map Q ,
 
-" Set ultisnips triggers
-let g:UltiSnipsExpandTrigger="<tab>"                                            
-let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"   
+" open or create spec file
+function get_spec:()
+	let spec_path=substitute(expand("%:p:h"), "/app/", "/spec/", "")."/"
+	let mkdir_command=":!mkdir -p ".spec_path
+	silent exec mkdir_command
+	let ruby_prog=expand("%:t:r")
+	let param_array=split(ruby_prog, '[A-Z][a-z]\+\zs')
+	let params=join(param_array, "_")
+	let g:spec=spec_path.params."_spec.rb"
+	redraw!
+	let editcmd="e ".g:spec
+	silent exec editcmd
+endfunction
+
+nmap <silent> ,A :call get_spec:()<cr><cr>
+
+nnoremap <leader>rap  :RAddParameter<cr>
+nnoremap <leader>rcpc :RConvertPostConditional<cr>
+nnoremap <leader>rel  :RExtractLet<cr>
+vnoremap <leader>rec  :RExtractConstant<cr>
+vnoremap <leader>relv :RExtractLocalVariable<cr>
+nnoremap <leader>rit  :RInlineTemp<cr>
+vnoremap <leader>rrlv :RRenameLocalVariable<cr>
+vnoremap <leader>rriv :RRenameInstanceVariable<cr>
+vnoremap <leader>rem  :RExtractMethod<cr>
+
+" rcodetools stuff
+" plain annotations
+map <silent> <F10> !xmpfilter -a<cr>
+nmap <silent> <F10> V<F10>
+imap <silent> <F10> <ESC><F10>a
+
+" Test::Unit assertions; use -s to generate RSpec expectations instead
+map <silent> <S-F10> !xmpfilter -s<cr>
+nmap <silent> <S-F10> V<S-F10>
+imap <silent> <S-F10> <ESC><S-F10>a
+
+" Annotate the full buffer
+" I actually prefer ggVG to %; it's a sort of poor man's visual bell
+nmap <silent> <F11> mzggVG!xmpfilter -a<cr>'z
+imap <silent> <F11> <ESC><F11>
+
+" assertions
+nmap <silent> <S-F11> mzggVG!xmpfilter -u<cr>'z
+imap <silent> <S-F11> <ESC><S-F11>a
+
+" Add # => markers
+vmap <silent> <F12> !xmpfilter -m<cr>
+nmap <silent> <F12> V<F12>
+imap <silent> <F12> <ESC><F12>a
+
+" Remove # => markers
+vmap <silent> <S-F12> ms:call RemoveRubyEval()<CR>
+nmap <silent> <S-F12> V<S-F12>
+imap <silent> <S-F12> <ESC><S-F12>a
+
+
+function! RemoveRubyEval() range
+  let begv = a:firstline
+  let endv = a:lastline
+  normal Hmt
+  set lz
+  execute ":" . begv . "," . endv . 's/\s*# \(=>\|!!\).*$//e'
+  normal 'tzt`s
+  set nolz
+  redraw
+endfunction
