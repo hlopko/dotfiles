@@ -3,7 +3,7 @@ unsetopt correct
 ZSH=$HOME/.oh-my-zsh
 export EDITOR="vim"
 
-plugins=(git)
+plugins=(git mercurial)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -42,7 +42,7 @@ alias sd='svn diff --diff-cmd=/home/m/apps/svn-diff-meld'
 alias dstx='cd ~/Projects/stx/jv-branch/'
 alias dlibrun='dstx; cd build/stx/librun'
 alias dstc='dstx; cd build/stx/stc'
-alias stx='/home/m/Projects/stx/jv-branch/build/stx/projects/smalltalk/smalltalk -I --quick'
+alias stx='/home/m/Projects/stx/jv-branch/build/stx/projects/smalltalk/smalltalk --cgdb'
 alias dlibjava='dstx; cd build/stx/libjava'
 alias dgplus='cd /home/m/Projects/ruby/gplus/'
 alias dhotelline='cd /home/m/Projects/ruby/hotelline/'
@@ -64,7 +64,7 @@ alias gp='git push'
 alias pp='git pull && git push'
 alias dbooster='cd ~/Projects/java/bbooster'
 alias drbooster='cd ~/Projects/ruby/booster'
-alias ddevfest='cd ~/Projects/writing/devfest_talk'
+alias dthesis='cd ~/Projects/writings/hlopko_thesis_14'
 alias what_i_do='tail -n 2000 ~/.zsh_history | cut -d ";" -f 2 | awk "{print $1 $2}" | sort | uniq -c | sort -n'
 alias logs.booster="ssh bwnet 'tail -f /var/log/bbooster/bbooster-trace-logfile.log'"
 alias logs.booster.beta="ssh bwnet 'tail -f /var/log/bbooster/bbooster-beta-trace-logfile.log'"
@@ -81,7 +81,7 @@ fi
 
 if [[ $LOGNAME == 'm' ]]; then
 	source ~/bin/nice_prompt #show cool command prompt
-fi	
+fi
 
 bindkey '\e[3~' delete-char #make del working
 bindkey '^R' history-incremental-search-backward #bind rev-search to ctrl-r
@@ -112,14 +112,14 @@ key[PageDown]=${terminfo[knp]}
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
 
-if [[ -n ${terminfo[smkx]} ]] && [[ -n ${terminfo[rmkx]} ]]; then 
+if [[ -n ${terminfo[smkx]} ]] && [[ -n ${terminfo[rmkx]} ]]; then
   function zle-line-init () {
     echoti smkx
   }
   function zle-line-finish () {
     echoti rmkx
   }
-  
+
   zle -N zle-line-init
   zle -N zle-line-finish
 fi
@@ -132,3 +132,5 @@ bindkey '\C-x\C-e' edit-command-line
 export PATH="/usr/local/heroku/bin:/usr/lib/go/bin:$PATH"
 
 export RI="--format ansi --width 70"
+
+autoload -U zmv

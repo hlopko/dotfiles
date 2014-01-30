@@ -1,17 +1,13 @@
-set nocompatible               " be iMproved
-filetype off                   " required!
+filetype off                   " required for vundle
 
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
 
-Bundle 'vim-scripts/AutoTag'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'tpope/vim-fugitive'
 Bundle 'nathanaelkane/vim-indent-guides'
 Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
-Bundle 'puppetlabs/puppet-syntax-vim'
 Bundle 'tpope/vim-ragtag'
 Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
@@ -33,8 +29,14 @@ Bundle 'nelstrom/vim-visual-star-search'
 Bundle 'thoughtbot/vim-rspec'
 Bundle 'ecomba/vim-ruby-refactoring'
 Bundle 'bronson/vim-trailing-whitespace'
+Bundle 'rking/ag.vim'
+Bundle 'Peeja/vim-cdo'
+Bundle 'tpope/vim-abolish'
+Bundle 'noprompt/vim-yardoc'
+Bundle 'Soares/butane.vim'
 
-filetype plugin indent on     " required!
+
+filetype plugin indent on     " required by vundle
 
 let mapleader = ","
 set backupdir=/tmp
@@ -61,7 +63,7 @@ if has("autocmd")
   au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
   " Customisations based on house-style (arbitrary)
-  au FileType html,css,lisp,ruby,eruby,coffee setlocal ts=2 sts=2 sw=2 expandtab
+  au FileType html,css,lisp,ruby,eruby,coffee,vim setlocal ts=2 sts=2 sw=2 expandtab
   au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
   au FileType c,cpp,java setlocal ts=4 sts=4 sw=4 expandtab
 
@@ -69,14 +71,9 @@ if has("autocmd")
   au BufNew,BufNewFile *.txt,*.text,*.md,*.markdown set ft=markdown
   au BufNew,BufNewFile *.stx setfiletype st
   au BufNew,BufNewFile *.stx_test setfiletype st
-  au BufNew,BufNewFile *.lisp setfiletype lisp
   au BufNew,BufNewFile *.task setfiletype ruby
   au BufNew,BufNewFile *.json setfiletype javascript
-  au BufNew,BufNewFile *.js setfiletype javascript
-  au BufNew,BufNewFile *.prolog setfiletype prolog
-  au BufNew,BufNewFile *.pp setfiletype puppet
   au BufNew,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Guardfile,config.ru} set ft=ruby
-  au BufNew,BufNewFile {*.less} set ft=css
 endif
 
 "we dont need to be compatible with vi
@@ -152,26 +149,23 @@ set hlsearch
 ",space will clear search highlights
 nnoremap <leader><space> :noh<cr>
 
-",y to yank to system clipboard
-map <leader>y "+y
+" netrw tweaks
+let g:netrw_liststyle    = 3
 
 "tab will work for bracket matching
 "nmap <tab> %
 "vmap <tab> %
-
-"switch between last two files
-nnoremap <leader><leader> <C-^>
 
 "write to file requiring sudo
 cmap w!! %!sudo tee > /dev/null %
 
 "break long lines
 set wrap
-set textwidth=60
+set textwidth=79
 set formatoptions=qrn1
 
 "set min width of window
-set winwidth=80
+set winwidth=90
 
 "left right switch tabs
 nnoremap <left> :tabprev<cr>
@@ -194,19 +188,17 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""gary bernhardt's rename awesomeness
+"""""""""""""""""""""""""""""""""""""""""gary bernhardt's rename awesomeness
 function! RenameFile()
-    let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
+  let old_name = expand('%')
+  let new_name = input('New file name: ', expand('%'), 'file')
+  if new_name != '' && new_name != old_name
+    call RenameFileWithinVim(old_name, new_name)
+  endif
 endfunction
 map <Leader>n :call RenameFile()<cr>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""gary bernhardt's selecta awesomeness
+"""""""""""""""""""""""""""""""""""""""""gary bernhardt's selecta awesomeness
 " Run a given vim command on the results of fuzzy selecting from a given shell
 " command. See usage below.
 function! SelectaCommand(choice_command, selecta_args, vim_command)
@@ -228,18 +220,16 @@ nnoremap <leader>f :call SelectaCommand("find_files_exclude_boring", "", ":e")<c
 
 """""""""""""""""""""""""""""""""""""""""""""""""end  gary bernhardt's selecta awesomeness
 """""""""""""""""""""""""""""""""""""""""""""""""start mh's selecta awesomeness
+" Find files using ctags
 nnoremap <leader>o :call SelectaCommand("cut -d$'\t' -f 1 .git/tags", "", ":tag")<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""end mh's selecta awesomeness
 "ignore some files
 set wildignore+=*.o,*.obj,.git,.svn,public,tmp,app/assets/images
 
-" This makes RVM work inside Vim. I have no idea why.
-set shell=bash
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""gary bernhardt's rspec awesomeness
 map <leader>t :call RunTestFile()<cr>
 map <leader>T :call RunNearestTest()<cr>
-map <leader>a :call RunTests('')<cr>
+"map <leader>a :call RunTests('')<cr>
 "map <leader>c :w\|:!script/features<cr>
 "map <leader>w :w\|:!script/features --profile wip<cr>
 
@@ -270,7 +260,7 @@ function! SetTestFile()
     let t:grb_test_file=@%
 endfunction
 
-command StopSpring !spring stop
+command SSpring !spring stop
 
 function! RunTests(filename)
     " Write the file and run tests for the given filename
@@ -314,10 +304,6 @@ nnoremap <C-l> <C-W>l
 "window resizing
 map + <C-W>>
 map _ <C-W><
-map - <C-W>+
-
-"deselect search
-nnoremap <leader><space> :noh<cr>
 
 ":edit in file in the same dir as current file shortcuts
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
@@ -325,74 +311,6 @@ map <leader>ew :e %%
 map <leader>es :sp %%
 map <leader>ev :vsp %%
 map <leader>et :tabe %%
-
-"better buffer killing
-"delete the buffer; keep windows; create a scratch buffer if no buffers left
-function s:Kwbd(kwbdStage)
-  if(a:kwbdStage == 1)
-    if(!buflisted(winbufnr(0)))
-      bd
-      return
-    endif
-    let s:kwbdBufNum = bufnr("%")
-    let s:kwbdWinNum = winnr()
-    windo call s:Kwbd(2)
-    execute s:kwbdWinNum . 'wincmd w'
-    let s:buflistedLeft = 0
-    let s:bufFinalJump = 0
-    let l:nBufs = bufnr("$")
-    let l:i = 1
-    while(l:i <= l:nBufs)
-      if(l:i != s:kwbdBufNum)
-        if(buflisted(l:i))
-          let s:buflistedLeft = s:buflistedLeft + 1
-        else
-          if(bufexists(l:i) && !strlen(bufname(l:i)) && !s:bufFinalJump)
-            let s:bufFinalJump = l:i
-          endif
-        endif
-      endif
-      let l:i = l:i + 1
-    endwhile
-    if(!s:buflistedLeft)
-      if(s:bufFinalJump)
-        windo if(buflisted(winbufnr(0))) | execute "b! " . s:bufFinalJump | endif
-      else
-        enew
-        let l:newBuf = bufnr("%")
-        windo if(buflisted(winbufnr(0))) | execute "b! " . l:newBuf | endif
-      endif
-      execute s:kwbdWinNum . 'wincmd w'
-    endif
-    if(buflisted(s:kwbdBufNum) || s:kwbdBufNum == bufnr("%"))
-      execute "bd! " . s:kwbdBufNum
-    endif
-    if(!s:buflistedLeft)
-      set buflisted
-      set bufhidden=delete
-      set buftype=nofile
-      setlocal noswapfile
-    endif
-  else
-    if(bufnr("%") == s:kwbdBufNum)
-      let prevbufvar = bufnr("#")
-      if(prevbufvar > 0 && buflisted(prevbufvar) && prevbufvar != s:kwbdBufNum)
-        b #
-      else
-        bn
-      endif
-    endif
-  endif
-endfunction
-
-command! Kwbd call <SID>Kwbd(1)
-nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
-nmap <leader>X <Plug>Kwbd
-nmap <leader>x WW,X
-
-"tagbar
-let g:tagbar_width=26
-nmap <leader>m TagbarToggle<cr>
 
 "cool statusline
 if exists("*fugitive#statusline")
@@ -445,8 +363,47 @@ function! GetVisual() range
   return escaped_selection
 endfunction
 
+function! AbolishizePatternForGrep(pattern)
+  let result = "("
+  let result .= g:Abolish.snakecase(a:pattern)
+  let result .= "|"
+  let result .= g:Abolish.uppercase(a:pattern)
+  let result .= "|"
+  let result .= g:Abolish.dashcase(a:pattern)
+  let result .= "|"
+  let result .= g:Abolish.camelcase(a:pattern)
+  let result .= "|"
+  let result .= g:Abolish.mixedcase(a:pattern)
+  let result .= ")"
+  return result
+endfunction
+
+function! ProjectWideAbolishSubstitute()
+	let selection = g:Abolish.snakecase(GetVisual())
+	let replacement = g:Abolish.snakecase(input('Replace with: ', selection))
+	let search_in_dirs = input('Search destinations: ', 'app spec')
+  let files_to_rename = system("find ".search_in_dirs." -name '*".selection."*'")
+  for file_to_rename in split(files_to_rename)
+    if input("Do you want to rename ".file_to_rename."? ", "y") == "y"
+      let destination_file = substitute(file_to_rename, selection, replacement, '')
+      call RenameFileWithinVim(file_to_rename, destination_file)
+    endif
+  endfor
+  exec ":Ag '".AbolishizePatternForGrep(selection)."' ".search_in_dirs
+  exec ":Cdo S/".selection."/".replacement."/c"
+endfunction
+
+function! RenameFileWithinVim(source, dest)
+  exec ":e ".a:source
+  exec ":saveas ".a:dest
+  exec ":silent !rm ".a:source
+  exec ":blast"
+  redraw!
+endfunction
+
 " Start the find and replace command across the entire file
 vmap <leader>z <Esc>:%s/<c-r>=GetVisual()<cr>/
+vmap <leader>Z <Esc>:call ProjectWideAbolishSubstitute()<cr>
 "######################### end of find and replace selected text stuff #####################
 
 " dictionary word autocompletion
@@ -460,9 +417,6 @@ set diffexpr=""
 
 "disable folding for markdown
 let g:vim_markdown_folding_disabled=1
-
-"use nerdtree instead of netrw
-let NERDTreeHijackNetrw=1
 
 "delete current buffer file
 command DeleteCurrentFile call delete(expand('%')) | bdelete!
@@ -540,3 +494,13 @@ function! RemoveRubyEval() range
   set nolz
   redraw
 endfunction
+
+nmap <leader>w :FixWhitespace<cr>
+
+noremap <leader>bd :Bclose<cr>      " Close the buffer.
+noremap <leader>bl :ls<cr>          " List buffers.
+noremap <leader>bn :bn<cr>          " Next buffer.
+noremap <leader>bp :bp<cr>          " Previous buffer.
+noremap <leader>bt :b#<cr>          " Toggle to most recently used buffer.
+noremap <leader>bx :Bclose!<cr>     " Close the buffer & discard changes.
+noremap <leader>x  WW:Bclose<cr>

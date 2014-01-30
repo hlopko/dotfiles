@@ -61,6 +61,10 @@
 	bin = !find $(git --exec-path) -type f | xargs basename | $(git config --get core.pager)
 	ctags = !.git/hooks/ctags
 	serve = !git daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
+	incoming = !git fetch && git log ..@{u}
+	outgoing = !git fetch && git log @{u}..
+	incoming-diff = !git fetch && git difftool ..@{u}
+	outgoing-diff = !git fetch && git difftool @{u}..
 [mergetool "fugitive"]
 	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
 [diff "ruby"]

@@ -47,4 +47,4 @@ if [ $need_rails ]; then
 	fi
 fi
 echo "Calling $command $filename"
-RAILS_ENV=test $command $filename
+RAILS_ENV=test time -f"\n\nTotal time: %e\n\n" $command $filename
