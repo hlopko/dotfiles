@@ -7,10 +7,6 @@ plugins=(git mercurial)
 
 source $ZSH/oh-my-zsh.sh
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
-
 asend() { send "$*" && mplayer '/home/m/apps/consider_it_done.mp3'; }
 
 
@@ -18,7 +14,7 @@ send() { notify-send -i '/home/m/.send_img.png' "$*" "$(eval "$*" 2>/dev/null | 
 send-fail() { notify-send -i '/home/m/.send_fail_img.png' "$*" "$(eval "$*" 2>/dev/null | tail -4)"; }
 
 
-alias tmux="TERM=screen-256color-bce tmux"
+alias zork='frotz ~/.wine/drive_c/GOG\ Games/Zork\ Anthology/Zork/DATA/ZORK1.DAT'
 alias locate='locate -i'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -70,6 +66,7 @@ alias logs.booster="ssh bwnet 'tail -f /var/log/bbooster/bbooster-trace-logfile.
 alias logs.booster.beta="ssh bwnet 'tail -f /var/log/bbooster/bbooster-beta-trace-logfile.log'"
 alias logs.less.booster="ssh bwnet 'less /var/log/bbooster/bbooster-trace-logfile.log'"
 alias logs.less.booster.beta="ssh bwnet 'less /var/log/bbooster/bbooster-beta-trace-logfile.log'"
+alias bi="bundle install --standalone"
 
 if [ -d $HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk ]; then
   PATH=$PATH:$HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk #add stx binary to path

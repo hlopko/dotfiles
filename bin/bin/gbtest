@@ -17,26 +17,32 @@ if [ $# -gt 0 ]; then # we have args
 	set +e; echo "$grep_filename" | grep '^app' > /dev/null
 	if [ $? -eq 0 ]; then # no match? we have a stand-alone spec or class in lib
 		grep_filename=`echo "$grep_filename" | sed 's/^app/spec/' | sed 's/.rb$/_spec.rb/'`
-		filename="$grep_filename`echo "$filename" | sed 's/[^:]*//'`" 
+		filename="$grep_filename`echo "$filename" | sed 's/[^:]*//'`"
 	fi
 	set +e; echo "$grep_filename" | grep '^lib' > /dev/null
 	if [ $? -eq 0 ]; then # no match? we really have a stand-alone spec
 		grep_filename=`echo "$grep_filename" | sed 's/^lib/spec\/lib/' | sed 's/.rb$/_spec.rb/'`
-		filename="$grep_filename`echo "$filename" | sed 's/[^:]*//'`" 
+		filename="$grep_filename`echo "$filename" | sed 's/[^:]*//'`"
 	fi
     set +e; grep -r '\bspec_helper\b' $grep_filename > /dev/null
     if [ $? -eq 1 ]; then # no match; we have a stand-alone spec
 		echo "Yippie doesn't need rails"
-		need_rails=''
+		need_rails=0
     fi
 	set -e
 else # we have no args
-    filename='spec'
+	#we dont want rails
+	need_rails=0
+  filename="--profile 5 `find spec -name '*spec.rb' | xargs grep -iL 'spec_helper' | xargs`"
 fi
 
 command='rspec'
+if [ -e '.bundle/binstubs/rspec' -a $need_rails -ne 1 ]; then
+  echo "This is gonna be faaaaaaa..."
+  command='.bundle/binstubs/rspec'
+fi
 
-if [ $need_rails ]; then
+if [ $need_rails -eq 1 ]; then
 	echo "Arrrgh needs rails"
 	which spring 2>&1 > /dev/null
 	if [ $? -eq 0 ]; then
@@ -46,5 +52,5 @@ if [ $need_rails ]; then
 		command="$command"
 	fi
 fi
-echo "Calling $command $filename"
+#echo "Calling $command $filename"
 RAILS_ENV=test time -f"\n\nTotal time: %e\n\n" $command $filename
