@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+MAILDIR = "/home/m/Downloads/Gmail/foomail"
+
+
+require 'maildir'
+require 'mail'
+require 'pp'
+
+
+Maildir.new(MAILDIR).list(:cur).each do |message|
+  mail = Mail.read_from_string message.data
+  if mail.subject && mail.subject.start_with?("[MI-RUN Project Submission]")
+    puts mail.subject
+    mail.attachments.each do |attachment|
+      if attachment.content_type.include?("zip")
+        File.open("/home/m/tmp/#{attachment.filename}", "w+b", 0644) { |f| f.write attachment.body.decoded }
+      end
+    end
+  end
+end

@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'fileutils'
+
+filename = nil
+OptionParser.new do |opts|
+  opts.banner = "Usage: to-wiki-inbox [options] content"
+
+  opts.on("-f file",
+          "--file file",
+          String,
+          "specify file related to the wiki entry") do |arg|
+    filename = arg
+  end
+end.parse!
+
+message = $stdin.read
+
+entry_text = "\n\n#{'#' * 79}\n"
+entry_text += "## #{Time.now.strftime("  %Y/%m/%d %H:%M:%S  ##").rjust(76, " ")}\n"
+entry_text += "## #{"  #{filename}  ##".rjust(76)}\n" if filename
+entry_text += "#{'#' * 79}\n"
+entry_text += "\n#{message}\n"
+entry_text += "\n" unless entry_text.end_with?("\n\n")
+entry_text += "#{'#' * 79}"
+
+File.open('/home/m/vimwiki/Inbox.md', 'a') { |f| f.write(entry_text) }
+

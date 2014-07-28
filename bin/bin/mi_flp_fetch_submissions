@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'gmail'
+require 'fileutils'
+CHECK_SINCE = Date.parse("2014-04-24")
+
+login = `~/.offlineimap.py`.strip
+password =  `~/.offlineimap.py password`.strip
+Gmail.new(login, password) do |gmail|
+  puts 'Logged in!'
+  count = gmail.mailbox('cvut').count(after: CHECK_SINCE)
+  counter = 0
+  puts "Going to check #{count} emails"
+  gmail.mailbox('cvut').emails(after: CHECK_SINCE).select do |mail|
+    counter += 1
+    if mail.subject && mail.subject.include?("[MI-FLP][AGENT]")
+      mail.attachments.each do |attachment|
+        author = mail.subject[16..-2]
+        puts "Processing email #{mail.subject} from #{author}, status #{counter}/#{count}"
+        if attachment.content_type.include?("zip")
+          FileUtils.mkdir_p(
+            "/home/m/Projects/teaching/flp/2013_2014/submissions/#{author}")
+          fname = "/home/m/Projects/teaching/flp/2013_2014/submissions/"\
+            "#{author}/#{attachment.filename}"
+          File.open(fname, "w+b", 0644) { |f| f.write attachment.body.decoded }
+        end
+      end
+    end
+  end
+end
