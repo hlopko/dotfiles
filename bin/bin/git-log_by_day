@@ -6,5 +6,5 @@ echo ----------------------
 git log --no-merges --format="%cd" --date=short | sort -u -r | while read DATE ; do
     echo
     echo [$DATE]
-	GIT_PAGER=cat git log --no-merges --format=" * %Cblue%s%Creset (%Cgreen%an%Cgreen)" --since="$DATE 00:00:00" --until="$DATE 24:00:00"
+	GIT_PAGER=cat git log --no-merges --format=" * %C(yellow)%h%Creset %C(blue)%s%Creset (%C(green)%an%Creset)" --since="$DATE 00:00:00" --until="$DATE 24:00:00"
 done

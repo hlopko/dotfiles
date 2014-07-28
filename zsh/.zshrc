@@ -1,18 +1,11 @@
 unsetopt correct_all
 unsetopt correct
 ZSH=$HOME/.oh-my-zsh
-export EDITOR="vim"
+export EDITOR='vim'
 
-plugins=(git mercurial)
+plugins=(git mercurial docker)
 
 source $ZSH/oh-my-zsh.sh
-
-asend() { send "$*" && mplayer '/home/m/apps/consider_it_done.mp3'; }
-
-
-send() { notify-send -i '/home/m/.send_img.png' "$*" "$(eval "$*" 2>/dev/null | tail -4)"; }
-send-fail() { notify-send -i '/home/m/.send_fail_img.png' "$*" "$(eval "$*" 2>/dev/null | tail -4)"; }
-
 
 alias zork='frotz ~/.wine/drive_c/GOG\ Games/Zork\ Anthology/Zork/DATA/ZORK1.DAT'
 alias locate='locate -i'
@@ -42,6 +35,7 @@ alias stx='/home/m/Projects/stx/jv-branch/build/stx/projects/smalltalk/smalltalk
 alias dlibjava='dstx; cd build/stx/libjava'
 alias dgplus='cd /home/m/Projects/ruby/gplus/'
 alias dhotelline='cd /home/m/Projects/ruby/hotelline/'
+alias dblog='cd /home/m/Projects/writings/blog.hlopko.com/'
 alias a='ack-grep'
 alias brake='bundle exec rake'
 alias sails='spring rails'
@@ -67,6 +61,14 @@ alias logs.booster.beta="ssh bwnet 'tail -f /var/log/bbooster/bbooster-beta-trac
 alias logs.less.booster="ssh bwnet 'less /var/log/bbooster/bbooster-trace-logfile.log'"
 alias logs.less.booster.beta="ssh bwnet 'less /var/log/bbooster/bbooster-beta-trace-logfile.log'"
 alias bi="bundle install --standalone"
+alias be="bundle exec"
+alias cd-='cd -'
+alias cd.='cd ..'
+alias cd..='cd ../..'
+alias cd...='cd ../../..'
+alias cd....='cd ../../../..'
+alias tmux='TERM=xterm-256color tmux -2'
+alias hamster='hamster-cli'
 
 if [ -d $HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk ]; then
   PATH=$PATH:$HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk #add stx binary to path

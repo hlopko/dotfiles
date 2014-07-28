@@ -96,7 +96,7 @@ datasets.each do |data|
   unless result.include? "Entry Has Been Received"
     puts "wrong captcha"
     result = submit_form data
-  end 
+  end
   puts "OK"
 end
 

@@ -26,31 +26,32 @@ if [ $# -gt 0 ]; then # we have args
 	fi
     set +e; grep -r '\bspec_helper\b' $grep_filename > /dev/null
     if [ $? -eq 1 ]; then # no match; we have a stand-alone spec
-		echo "Yippie doesn't need rails"
+		#echo -n "X"
 		need_rails=0
     fi
 	set -e
 else # we have no args
 	#we dont want rails
 	need_rails=0
-  filename="--profile 5 `find spec -name '*spec.rb' | xargs grep -iL 'spec_helper' | xargs`"
+  filename="--profile 5 `find spec -name '*spec.rb' | xargs grep -iL 'spec_helper' | xargs grep -iL '^# slow spec$' | xargs`"
 fi
 
 command='rspec'
 if [ -e '.bundle/binstubs/rspec' -a $need_rails -ne 1 ]; then
-  echo "This is gonna be faaaaaaa..."
+  echo -n "B"
   command='.bundle/binstubs/rspec'
 fi
 
 if [ $need_rails -eq 1 ]; then
-	echo "Arrrgh needs rails"
+  echo -n "R"
 	which spring 2>&1 > /dev/null
 	if [ $? -eq 0 ]; then
-		echo "Luckily there's spring"
-		command="spring $command"
+    echo -n "S"
+    command="spring $command"
 	else
-		command="$command"
+    command="bundle exec $command"
 	fi
 fi
-#echo "Calling $command $filename"
-RAILS_ENV=test time -f"\n\nTotal time: %e\n\n" $command $filename
+#echo -n " "
+echo " Calling nice -n 19 $command $filename"
+RAILS_ENV=test time -f"\n\n Duration %e\n\n" nice -n 19 $command $filename

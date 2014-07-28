@@ -14,12 +14,12 @@ PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(svn_prompt) '
 
 function __update_prompt_vars {
 	git_prompt
-	svn_prompt
+	#svn_prompt
 }
 
 function svn_prompt {
 	if `svn info > /dev/null 2>&1`; then
-		local REVISION=`svn info | awk '/Revision/{print $2}'` 
+		local REVISION=`svn info | awk '/Revision/{print $2}'`
 		echo "$GREEN""[r$REVISION]""$NORMAL"
 	fi
 }
@@ -49,9 +49,9 @@ function minutesHR {
 	local mins=`minutes`
 	local hours=$((mins/60))
 	local days=$((hours/24))
-	if [ $mins -lt 100 ]; then 
+	if [ $mins -lt 100 ]; then
 		echo "${mins}m"
-	elif [ $hours -lt 72 ]; then 
+	elif [ $hours -lt 72 ]; then
 		echo "${hours}h"
 	else
 		echo "${days}d"
