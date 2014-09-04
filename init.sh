@@ -2,7 +2,7 @@
 
 set -e
 
-apt_packages="xstow tree screen ruby ruby-dev"
+apt_packages="vim-gnome xstow tree screen ruby ruby-dev"
 
 sudo apt-get install -y $apt_packages
 
@@ -25,12 +25,8 @@ echo "Done symlinking"
 
 if [[ ! $1 = "clean" ]]; then
 	if [[ ! $1 = "fast" ]]; then
-		hash rvm 2>/dev/null && rvm use system
-		screen -D -m vim -X +BundleInstall +qall
+		screen -D -m vim -X +PluginInstall +qall
 		echo "Done installing vim plugins"
-		cd ~/.vim/bundle/command-t/ruby/command-t 
-		ruby extconf.rb 
-		make
 	fi
 fi
 
