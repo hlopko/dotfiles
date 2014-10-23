@@ -55,6 +55,7 @@ alias gp='git push'
 alias pp='git pull && git push'
 alias dbooster='cd ~/Projects/java/bbooster;'
 alias drbooster='cd ~/Projects/ruby/booster;'
+alias dworkplanner='cd ~/Projects/ruby/workplanner;'
 alias dthesis='cd ~/Projects/writings/hlopko_thesis_14;'
 alias what_i_do='tail -n 2000 ~/.zsh_history | cut -d ";" -f 2 | awk "{print $1 $2}" | sort | uniq -c | sort -n'
 alias logs.booster="ssh bwnet 'tail -f /var/log/bbooster/bbooster-trace-logfile.log'"
@@ -72,6 +73,7 @@ alias tmux='TERM=xterm-256color tmux -2'
 alias hamster='hamster-cli'
 alias kbd.cz='setxkbmap cz -variant qwerty'
 alias kbd.us='setxkbmap us'
+alias suspend='dbus-send --system --print-reply --dest="org.freedesktop.login1" /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:true'
 
 if [ -d $HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk ]; then
   PATH=$PATH:$HOME/Projects/stx/jv-branch/build/stx/projects/smalltalk #add stx binary to path
