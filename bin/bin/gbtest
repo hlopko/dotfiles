@@ -7,13 +7,17 @@
 #
 # tweaked with love by mh
 
+function debug {
+  # echo $1
+}
+
 set -e
 need_rails=1
 if [ $# -gt 0 ]; then # we have args
-    filename=$1
-    # Remove trailing line numbers from filename, e.g. spec/my_spec.rb:33
-    grep_filename=`echo $1 | sed 's/:.*$//g'`
-	# when called on tested class, find spec
+  filename=$1
+  # Remove trailing line numbers from filename, e.g. spec/my_spec.rb:33
+  grep_filename=`echo $1 | sed 's/:.*$//g'`
+  # when called on tested class, find spec
 	set +e; echo "$grep_filename" | grep '^app' > /dev/null
 	if [ $? -eq 0 ]; then # no match? we have a stand-alone spec or class in lib
 		grep_filename=`echo "$grep_filename" | sed 's/^app/spec/' | sed 's/.rb$/_spec.rb/'`
@@ -26,7 +30,7 @@ if [ $# -gt 0 ]; then # we have args
 	fi
     set +e; grep -r '\bspec_helper\b' $grep_filename > /dev/null
     if [ $? -eq 1 ]; then # no match; we have a stand-alone spec
-		#echo -n "X"
+		debug "X"
 		need_rails=0
     fi
 	set -e
@@ -38,20 +42,18 @@ fi
 
 command='rspec'
 if [ -e '.bundle/binstubs/rspec' -a $need_rails -ne 1 ]; then
-  echo -n "B"
+  debug "B"
   command='.bundle/binstubs/rspec'
 fi
 
 if [ $need_rails -eq 1 ]; then
-  echo -n "R"
-	which spring 2>&1 > /dev/null
-	if [ $? -eq 0 ]; then
-    echo -n "S"
-    command="spring $command"
+  debug "R"
+	if [ -e bin/spring ]; then
+    debug "Spring"
+    command="bin/spring $command"
 	else
     command="bundle exec $command"
 	fi
 fi
-#echo -n " "
-echo " Calling nice -n 19 $command $filename"
-RAILS_ENV=test time -f"\n\n Duration %e\n\n" nice -n 19 $command $filename
+debug "Calling nice -n 19 $command $filename"
+RAILS_ENV=test time --quiet -f"\n\nDuration %e\n\n" nice -n 19 $command $filename
