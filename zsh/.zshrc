@@ -35,6 +35,7 @@ alias stx='/home/m/Projects/stx/jv-branch/build/stx/projects/smalltalk/smalltalk
 alias dlibjava='dstx; cd build/stx/libjava;'
 alias dgplus='cd /home/m/Projects/ruby/gplus/;'
 alias dhotelline='cd /home/m/Projects/ruby/hotelline/;'
+alias dwebis='cd /home/m/Projects/java/webis/;'
 alias dblog='cd /home/m/Projects/writings/blog.hlopko.com/;'
 alias a='ack-grep'
 alias brake='bundle exec rake'

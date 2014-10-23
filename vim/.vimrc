@@ -11,33 +11,34 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'vimwiki/vimwiki'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'tpope/vim-fugitive'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-ragtag'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-endwise'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-markdown'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-bundler'
+Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-rake'
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-dispatch'
+Plugin 'tpope/vim-rsi'
+Plugin 'tpope/vim-eunuch'
+Plugin 'tpope/vim-projectionist'
 Plugin 'michaeljsmith/vim-indent-object'
 Plugin 'nelstrom/vim-visual-star-search'
-Plugin 'thoughtbot/vim-rspec'
 Plugin 'ecomba/vim-ruby-refactoring'
-Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'rking/ag.vim'
 Plugin 'Peeja/vim-cdo'
-Plugin 'tpope/vim-abolish'
 Plugin 'noprompt/vim-yardoc'
+Plugin 'SirVer/ultisnips'
 Plugin 'AndrewRadev/splitjoin.vim'
-Plugin 'tpope/vim-dispatch'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'Soares/butane.vim'
+Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'mhlopko/witness_protection'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -132,21 +133,31 @@ set splitright
 
 " Break long lines
 set wrap
-set textwidth=85
+set textwidth=72
 highlight ColorColumn ctermbg=magenta
-call matchadd('ColorColumn', '\%87v', 100)
+call matchadd('ColorColumn', '\%85v', 100)
 
 set formatoptions=qrn1
 
 " Set min width of window
-set winwidth=84
+set winwidth=90
 
 " Ignore whitespace changes in diff
 set diffopt+=iwhite
+
+" Use vertical split on vimdiff
+set diffopt+=vertical
+
 set diffexpr=""
 
 " Ignore some files
 set wildignore+=*.o,*.obj,.git,.svn,public,tmp,app/assets/images
+
+" Automatically save before commands like next or make
+set autowrite
+
+" Do not redraw while in macros
+set lazyredraw
 
 " Enable matchit macros
 runtime macros/matchit.vim
@@ -154,70 +165,91 @@ runtime macros/matchit.vim
 " Disable folding for markdown
 let g:vim_markdown_folding_disabled=1
 
+" Embedded languages in markdown
+let g:markdown_fenced_languages = [ 'ruby', 'st', 'c' ]
+
 " }}}
 
 " Statusline {{{
 
+set statusline=%<      " Truncate from here if line is too long
+set statusline+=%f     " Path to the file
+set statusline+=%h     " Show help buffer flag is so
+set statusline+=%m     " Show modified flag is so
+set statusline+=%r     " Show readonly flag is so
+set statusline+=\ -\   " separator
+set statusline+=%y     " filetype
+
 if exists("*fugitive#statusline")
-	set statusline=%<      " Truncate from here if line is too long
-	set statusline+=%f     " Path to the file
-	set statusline+=%h     " Show help buffer flag is so
-	set statusline+=%m     " Show modified flag is so
-	set statusline+=%r     " Show readonly flag is so
-	set statusline+=\ -\   " separator
-  set statusline+=%y     " filetype
   set statusline+=%{fugitive#statusline()}    " Add fugitive niceties
-  set statusline+=%=     " move over to the right
-  set statusline+=%-14.(%l/%L,%c%) " Start group, line/total lines, column, end group
-  set statusline+=\ %P   " Percentage through file
 endif
+
+set statusline+=%=     " move over to the right
+set statusline+=%-14.(%l/%L,%c%) " Start group, line/total lines, column, end group
+set statusline+=\ %P   " Percentage through file
 
 " }}}
 
 " Autocmds {{{
-autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
   \| exe "normal g'\"" | endif
 
 " Syntax of these languages is fussy over tabs Vs spaces
-autocmd FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+au FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
+au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 au FileType c,cpp,java,javascript setlocal ts=4 sts=4 sw=4 expandtab
 "hide all fugitive buffers so we dont have to close them manually
-autocmd BufReadPost fugitive://* set bufhidden=delete
-autocmd BufNewFile,BufReadPost *.stx set filetype=st
-autocmd BufNewFile,BufReadPost *.stx_test set filetype=st
-autocmd BufNewFile,BufReadPost *.task set filetype=ruby
-autocmd BufNewFile,BufReadPost *.json set filetype=javascript
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-autocmd BufNewFile,BufReadPost {Gemfile,Rakefile,Vagrantfile,Thorfile,Guardfile,config.ru} set filetype=ruby
+au BufReadPost fugitive://* set bufhidden=delete
+au BufNewFile,BufReadPost *.stx set filetype=st
+au BufNewFile,BufReadPost *.stx_test set filetype=st
+au BufNewFile,BufReadPost *.task set filetype=ruby
+au BufNewFile,BufReadPost *.json set filetype=javascript
+au BufNewFile,BufReadPost *.md set filetype=markdown
+au BufNewFile,BufReadPost {Gemfile,Rakefile,Vagrantfile,Thorfile,Guardfile,config.ru} set filetype=ruby
 
 augroup filetype_vim
-  autocmd!
-  autocmd FileType vim setlocal foldmethod=marker
+  au!
+  au FileType vim setlocal foldmethod=marker
+augroup end
+
+augroup filetype_muttrc
+  au!
+  au FileType muttrc setlocal foldmethod=marker
+augroup end
+
+augroup erb_embedded_languages
+  au!
+  au BufNewFile,BufReadPre *.ajax_html.erb let b:eruby_subtype = 'html'
+  " au BufNewFile,BufReadPre *.md.erb let b:eruby_subtype = 'markdown'
 augroup end
 
 autocmd bufwritepost .vimrc source $MYVIMRC
 
+autocmd FileType ruby
+  \ if expand("%") =~# '_spec\.rb$' |
+  \   compiler gbtest | setlocal makeprg=gbtest\ $*|
+  \ endif
+" autocmd FileType ruby
+"       \ let b:start = executable('pry') ? 'pry -r "%:p"' : 'irb -r "%:p"' |
+"       \ if expand('%') =~# '_test\.rb$' |
+"       \   let b:dispatch = 'testrb %' |
+"       \ elseif expand('%') =~# '_spec\.rb$' |
+"       \   let b:dispatch = 'gbtest %' |
+"       \ elseif !exists('b:dispatch') |
+"       \   let b:dispatch = 'ruby -wc %' |
+"       \ endif
+
 " }}}
 
 " Code {{{
-
-" Gary Bernhardt's rename awesomeness
-function! RenameFile()
-  let old_name = expand('%')
-  let new_name = input('New file name: ', expand('%'), 'file')
-  if new_name != '' && new_name != old_name
-    call RenameFileWithinVim(old_name, new_name)
-  endif
-endfunction
 
 " Gary Bernhardt's selecta awesomeness
 " Run a given vim command on the results of fuzzy selecting from a given shell
 " command. See usage below.
 function! SelectaCommand(choice_command, selecta_args, vim_command)
   try
-    silent let selection = system(a:choice_command . " | selecta " . a:selecta_args)
+    let selection = system(a:choice_command . " | selecta " . a:selecta_args)
   catch /Vim:Interrupt/
     " Swallow the ^C so that the redraw below happens; otherwise there will be
     " leftovers from selecta on the screen
@@ -237,7 +269,7 @@ function! RunTestFile(...)
   endif
 
   " Run the tests for the previously-marked file.
-  let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\)$') != -1
+  let in_test_file = match(expand("%"), '_spec.rb$') != -1
   if in_test_file
     call SetTestFile()
   elseif !exists("t:grb_test_file")
@@ -260,12 +292,8 @@ function! RunTests(filename)
   " Write the file and run tests for the given filename
   :w
   :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
   if filereadable("/home/m/bin/gbtest")
-    exec ":Dispatch ~/bin/gbtest " . a:filename
+    exec ":Dispatch gbtest " . a:filename
   else
     exec ":!rspec --color " . a:filename
   end
@@ -307,9 +335,6 @@ endfunction
 
 command! SSpring !spring stop
 
-" Delete current buffer file
-command! DeleteCurrentFile call delete(expand('%')) | bdelete!
-
 " Open or create spec file
 function! get_spec:()
 	let spec_path=substitute(expand("%:p:h"), "/app/", "/spec/", "")."/"
@@ -323,6 +348,7 @@ function! get_spec:()
 	let editcmd="e ".g:spec
 	silent exec editcmd
 endfunction
+
 " }}}
 
 " VimWiki stuff {{{
@@ -336,16 +362,6 @@ function! SearchInDefaultWiki()
   let pattern = input("Search pattern in default wiki: ", '')
   exec ":VimwikiIndex"
   exec "VimwikiSearch ".pattern
-endfunction
-
-function! MarkTodoDone()
-  let line = getline(".")
-  let line = substitute(line, ' ([0-9 :-]*)$', '', '')
-  if line =~ '\[ \]'
-    let line = line.' ('.strftime("%F %T").')'
-  endif
-  let result_code = setline(".", line)
-  exec ':VimwikiToggleListItem'
 endfunction
 
 " }}}
@@ -362,20 +378,19 @@ nnoremap <leader><space> :noh<cr>
 nnoremap <tab> %
 vnoremap <tab> %
 
-" Write to file requiring sudo
-cmap w!! %!sudo tee > /dev/null %
+" Windows changing
+nnoremap <C-h> <C-W>h
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-l> <C-W>l
 
-" Left right switch tabs
-nnoremap <left> :tabprev<cr>
-nnoremap <right> :tabnext<cr>
-inoremap <left> <ESC>:tabprev<cr>
-inoremap <right> <ESC>:tabnext<cr>
+" Window resizing
+nnoremap + <C-W>>
+nnoremap _ <C-W><
 
-" Up down switch buffers
-nnoremap <up> :bn<cr>
-nnoremap <down> :bp<cr>
-inoremap <up> <ESC>:bn<cr>
-inoremap <down> <ESC>:bp<cr>
+" Switch tabs
+nnoremap [T :tabprev<cr>
+nnoremap ]T :tabnext<cr>
 
 "j k return to their initial column
 nnoremap j gj
@@ -385,8 +400,6 @@ nnoremap k gk
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
-
-nnoremap <Leader>n :call RenameFile()<cr>
 
 " Find all files in all non-dot directories starting in the working directory.
 " Fuzzy select one of those. Open the selected file with :e.
@@ -415,19 +428,6 @@ inoremap KJ <ESC>
 " Save file :)
 nnoremap WW :w<cr>
 
-" Save file and add it to git index
-nnoremap ,w :w<cr>:Gwrite<cr>
-
-" Windows changing
-nnoremap <C-h> <C-W>h
-nnoremap <C-j> <C-W>j
-nnoremap <C-k> <C-W>k
-nnoremap <C-l> <C-W>l
-
-" Window resizing
-nnoremap + <C-W>>
-nnoremap _ <C-W><
-
 " :edit in file in the same dir as current file shortcuts
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 
@@ -437,10 +437,10 @@ inoremap <c-]> <c-x><c-]>
 "make ,b call rake
 nnoremap <leader>b :w<cr>:!echo;echo;echo;echo;echo;echo;echo;echo;echo;<cr>:!rake<cr>
 
-"remap Q to leader so we dont go to ed mode accidentally
-map Q ,
+"remap Q to esc so we dont go to ed mode accidentally
+noremap Q <ESC>
 
-nmap <silent> ,A :call get_spec:()<cr><cr>
+nnoremap <silent> ,A :call get_spec:()<cr><cr>
 
 nnoremap <leader>rap  :RAddParameter<cr>
 nnoremap <leader>rcpc :RConvertPostConditional<cr>
@@ -452,24 +452,21 @@ vnoremap <leader>rrlv :RRenameLocalVariable<cr>
 vnoremap <leader>rriv :RRenameInstanceVariable<cr>
 vnoremap <leader>rem  :RExtractMethod<cr>
 
-nmap <leader>q :FixWhitespace<cr>
+nmap <leader>q :StripWhitespace<cr>
 
-noremap <leader>bd :Bclose<cr>      " Close the buffer.
-noremap <leader>bl :ls<cr>          " List buffers.
-noremap <leader>bn :bn<cr>          " Next buffer.
-noremap <leader>bp :bp<cr>          " Previous buffer.
-noremap <leader>bt :b#<cr>          " Toggle to most recently used buffer.
-noremap <leader>bx :Bclose!<cr>     " Close the buffer & discard changes.
 noremap <leader>x  WW:Bclose<cr>
-
 
 nmap <leader>w/ <Plug>VimwikiUISelect
 nmap <leader>ws :call SearchInDefaultWiki()<cr>
 vmap <leader>wi <esc>:silent '<,'>:w !to-wiki-inbox -f '%:p'<cr><cr>
-nmap <leader>wx :call MarkTodoDone()<cr>
 
-" Source the vimrc file after saving it
+" Open raw quick fix window
 nnoremap <leader>r :Copen!<cr>
+
+" Ultisnips
+let g:UltiSnipsExpandTrigger="<c-l>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " }}}
 
