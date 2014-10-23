@@ -19,13 +19,26 @@ set cpo-=C
 CompilerSet makeprg=gbtest
 
 CompilerSet errorformat=
-    \%f:%l:\ %tarning:\ %m,
-    \%E%.%#:in\ `load':\ %f:%l:%m,
     \%E%f:%l:in\ `%*[^']':\ %m,
     \%-Z\ \ \ \ \ \#\ %f:%l:%.%#,
-    \%E\ \ %\\d%\\+)%.%#,
+    \%E\ \ %\\d%\\+)\ %m,
+    \%-G%\\s%#(compared\ using\ ==),
+    \%C\ \ \ \ \ Failure/Error:\ %m\,
     \%C\ \ \ \ \ %m,
+    \%+GDuration\ %.%#,
+    \%-GFailures:,
+    \%-GRandomized\ with\ seed\ %\\d%\\+,
+    \%-GFailed\ examples:,
+    \%-G\ examples:,
+    \%+G%\\d%\\+\ examples%\\,\ 0\ failures,
+    \%-G%\\d%\\+\ examples%\\,\ %\\d%\\+\ failures,
+    \%-GFinished\ in%.%#,
+    \%-Grspec\ %./spec%.%#,
+    \%-G%[%.F%\\*]%#,
+    \%-G%[%\\s]%#,
     \%-G%.%#
+
+CompilerSet efm+=%-G%.%#,.
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
