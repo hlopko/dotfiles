@@ -6,5 +6,5 @@ if ARGV.size == 0
 else
   puts "INFILE: #{ARGV[0]}"
   puts "OUTFILE: #{ARGV[1]}"
-	`ffmbc -i #{ARGV[0]} -vcodec copy -strict experimental #{ARGV[1]}`
+	`avconv -i #{ARGV[0]} -vcodec copy -acodec copy #{ARGV[1]}`
 end

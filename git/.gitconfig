@@ -1,6 +1,7 @@
 [user]
 	name = Marcel Hlopko
 	email = marcel.hlopko@gmail.com
+	signingkey = Marcel Hlopko <marcel@hlopko.com>
 [github]
 	user = mhlopko
 [color]
@@ -101,3 +102,5 @@
 	templatedir = ~/.git_template
 [interactive]
 	singlekey = true
+[commit]
+	gpgsign = true

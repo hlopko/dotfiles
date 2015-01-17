@@ -7,6 +7,7 @@ find * -type f \
   -and -not -path 'doc*' \
   -and -not -path 'cache*' \
   -and -not -path 'vendor*' \
+  -and -not -path '.vendor*' \
   -and -not -path 'target*' \
   -and -not -path '.bundle*' \
   -and -not -path 'bundle*' \

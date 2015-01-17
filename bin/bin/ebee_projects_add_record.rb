@@ -63,11 +63,11 @@ login_response = @faraday.post("/process-login",
 redirected_homepage = @faraday.get("/work-records")
 
 work_record_response = @faraday.post("/work-records/new",
-           date:  @date,
-           project:  30,
-           iteration:  310,
-           workType:  2,
-           workDescription:  @description,
-           workedHours:  @hours,
-           hoursToBePaid:  @hours)
+                                     date:  @date,
+                                     project:  @project,
+                                     iteration:  @iteration,
+                                     workType:  @work_type,
+                                     workDescription:  @description,
+                                     workedHours:  @hours,
+                                     hoursToBePaid:  @hours)
 

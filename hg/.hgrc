@@ -1,5 +1,5 @@
 [ui]
-username = Marcel Hlopko <marcel.hlopko@gmail.com>
+username = Marcel Hlopko <marcel@hlopko.com>
 editor = vim
 
 [pager]
@@ -10,8 +10,14 @@ bb.prefix = https://bitbucket.org
 bb.username = mhlopko
 
 [extensions]
-mercurial_keyring = 
-color = 
-graphlog = 
+mercurial_keyring =
+color =
+graphlog =
 pager =
-mq = 
+mq =
+rebase =
+record =
+
+[alias]
+c = commit
+s = status

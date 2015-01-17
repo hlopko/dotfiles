@@ -1,21 +1,76 @@
 #!/usr/bin/env ruby
 
-MAILDIR = "/home/m/.gmail/all"
+MAILDIR = "/home/m/.mail/fastmail/INBOX.cvut"
 
 
 require 'maildir'
 require 'mail'
 require 'pp'
+require 'pathname'
 
+done = [ "trushart", "blazija1", "pekaczde", "pekaczde", "houtjaku",
+         "dlapavoj", "kaniotom", "blazemi5", "kleinmi2", "kolarp24",
+         "brabeji6", "jakltom1", "dzuremar", "bartito1", "homoldan",
+         "zoudujir", "hricorad", "trckajak", "bettezol", "prudedan",
+         "fibiggar", "zamecda1", "kalinja4", "novakro2", "volosmat",
+         "melezjak", "hrbeklu1", "zubalsta", "krupkma1", "nguyedu7",
+         "nemecjo2", "fedortom", "stepajin", "cabaijan", "pestape1",
+         "strobma1", "buiphuha", "munzafil", "zatretom", "rapekmic",
+         "rendlmic", "prunepe1", "havribra", "paprojan", "danelmar",
+         "papezka1", "havlij17", "rytirnik" ]
+errors = {}
+success = []
+
+def success_msg
+  "Vas ukol prosel skriptem, gratuluji. 25.11. se na to muj pan podiva osobne.\n\nvas verny Alfred"
+end
+
+def error_msg(output)
+  "Vas ukol neprosel skriptem. Nez vas ukol predam svemu panovi, pockam na opravenou verzi. Vystup:\n\n#{output}\n\nvas verny Alfred"
+end
+
+def run_tests(username)
+  output = ""
+  Dir.chdir(username) do
+    output << `mvn install 2>&1`
+  end
+
+  [ $?.to_i == 0, output ]
+rescue => e
+  puts e
+  [ false, "Directory not found: #{username}" ]
+end
 
 Maildir.new(MAILDIR).list(:cur).each do |message|
   mail = Mail.read_from_string message.data
-  if mail.subject && mail.subject.start_with?("[MI-RUN][2013]")
-    puts mail.subject
+  if mail.subject && mail.subject.start_with?("[MI-DPO][Semestral Work]")
     mail.attachments.each do |attachment|
+      username = Pathname.new(attachment.filename).basename(".zip").to_s
+      # next if done.include?(username)
+
       if attachment.content_type.include?("zip")
-        File.open("/home/m/Projects/teaching/dpo/2014/submissions/#{attachment.filename}", "w+b", 0644) { |f| f.write attachment.body.decoded }
+        File.open("/home/m/Projects/teaching/dpo/submissions/2015/mvc/#{attachment.filename}", "w+b", 0644) do |f|
+          f.write attachment.body.decoded
+        end
+
+        Dir.chdir("/home/m/Projects/teaching/dpo/submissions/2015/mvc") do
+          puts "#{username} couldnt be unzipped" unless system "unzip -o #{attachment.filename} > /dev/null 2>&1"
+
+          result = run_tests(username)
+          if result[0]
+            success << username
+            puts "#{username} success"
+            # puts `echo "#{success_msg}" | mutt -s "[MI-DPO][CBI]" "#{username}@fit.cvut.cz"`
+          else
+            errors[username] = result[1]
+            puts "#{username} failed"
+            # puts `echo "#{error_msg(result[1])}" | mutt -s "[MI-DPO][CBI]" "#{username}@fit.cvut.cz"`
+          end
+        end
       end
     end
   end
 end
+
+puts "Success: #{success}"
+puts "Errors: #{errors.keys}"

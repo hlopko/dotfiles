@@ -9,6 +9,7 @@
 
 function debug {
   # echo $1
+  echo ""
 }
 
 set -e

@@ -30,11 +30,9 @@ Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-projectionist'
 Plugin 'michaeljsmith/vim-indent-object'
 Plugin 'nelstrom/vim-visual-star-search'
-Plugin 'ecomba/vim-ruby-refactoring'
 Plugin 'rking/ag.vim'
 Plugin 'Peeja/vim-cdo'
 Plugin 'noprompt/vim-yardoc'
-Plugin 'SirVer/ultisnips'
 Plugin 'AndrewRadev/splitjoin.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'Soares/butane.vim'
@@ -156,8 +154,17 @@ set wildignore+=*.o,*.obj,.git,.svn,public,tmp,app/assets/images
 " Automatically save before commands like next or make
 set autowrite
 
+" Align c switch statements normally
+set cinoptions=l1
+
+" Do not fold c comments
+let g:c_no_comment_fold = 1
+
+" Show current cursor line
+set cursorline
+
 " Do not redraw while in macros
-set lazyredraw
+" set lazyredraw
 
 " Enable matchit macros
 runtime macros/matchit.vim
@@ -166,7 +173,7 @@ runtime macros/matchit.vim
 let g:vim_markdown_folding_disabled=1
 
 " Embedded languages in markdown
-let g:markdown_fenced_languages = [ 'ruby', 'st', 'c' ]
+let g:markdown_fenced_languages = [ 'ruby', 'st', 'c', 'scheme' ]
 
 " }}}
 
@@ -216,6 +223,26 @@ augroup end
 augroup filetype_muttrc
   au!
   au FileType muttrc setlocal foldmethod=marker
+augroup end
+
+augroup filetype_scm
+  au!
+  au FileType scheme nnoremap <buffer> <leader>t :!./fmsc < %<cr>
+augroup end
+
+augroup filetype_cpp
+  au!
+  au FileType cpp nnoremap <buffer> <leader>t :!g++ -g % && ./a.out < input<cr>
+augroup end
+
+augroup filetype_c
+  au!
+  au FileType c setlocal foldmethod=syntax
+  au FileType c setlocal foldnestmax=1
+augroup end
+
+augroup filetype_mail
+  au!
 augroup end
 
 augroup erb_embedded_languages
@@ -462,11 +489,6 @@ vmap <leader>wi <esc>:silent '<,'>:w !to-wiki-inbox -f '%:p'<cr><cr>
 
 " Open raw quick fix window
 nnoremap <leader>r :Copen!<cr>
-
-" Ultisnips
-let g:UltiSnipsExpandTrigger="<c-l>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " }}}
 

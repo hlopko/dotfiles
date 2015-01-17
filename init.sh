@@ -2,13 +2,14 @@
 
 set -e
 
-apt_packages="vim-gnome xstow tree screen ruby ruby-dev"
+apt_packages="vim-gnome xstow tree ruby ruby-dev mutt offlineimap "\
+"msmtp-gnome tmux zsh"
 
 sudo apt-get install -y $apt_packages
 
 echo "Done installing packages"
 
-packages_to_be_linked=( bash bin gdb git hg ruby screen tmux vim zsh )
+packages_to_be_linked=( bash bin gdb git hg ruby screen tmux vim zsh mail )
 
 if [[ $1 = "clean" ]]; then
 	ARGS="-D"
