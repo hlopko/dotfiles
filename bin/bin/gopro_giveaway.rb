@@ -45,51 +45,6 @@ def submit_form(data)
   form.submit.body
 end
 
-datasets = [{
-	first_name:  "Marcel",
-  last_name: "Hlopko",
-  email: "hlopik@gmail.com",
-  postal_code: "17000",
-  country: "_czechRepublic"
-}, {
-	first_name:  "Marcel",
-  last_name: "Hlopko",
-  email: "marcel.hlopko@gmail.com",
-  postal_code: "17000",
-  country: "_czechRepublic"
-}, {
-	first_name:  "Marcel",
-  last_name: "Hlopko",
-  email: "marcel.hlopko@fit.cvut.com",
-  postal_code: "17000",
-  country: "_czechRepublic"
-}, {
-	first_name:  "Marcel",
-  last_name: "Hlopko",
-  email: "hlopko@ebee.cz",
-  postal_code: "17000",
-  country: "_czechRepublic"
-}, {
-	first_name:  "Lucia",
-  last_name: "Hlopkova",
-  email: "lucia.hlopkova@gmail.com",
-  postal_code: "17000",
-  country: "_czechRepublic"
-}, {
-	first_name:  "Pavlina",
-  last_name: "Michalkova",
-  email: "michalkova.pavlina@centrum.sk",
-  postal_code: "17000",
-  country: "_czechRepublic"
-}, {
-	first_name:  "Pavlina",
-  last_name: "Michalkova",
-  email: "pavlina.michalkova@gmail.com",
-  postal_code: "17000",
-  country: "_czechRepublic"
-}
-]
-
 
 datasets.each do |data|
   result = submit_form data
