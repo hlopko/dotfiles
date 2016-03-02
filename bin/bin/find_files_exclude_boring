@@ -2,6 +2,7 @@
 
 find * -type f \
   -and -not -path 'tmp*' \
+  -and -not -path 'out*' \
   -and -not -path '*.o' \
   -and -not -path '*.so' \
   -and -not -path 'doc*' \
@@ -11,6 +12,14 @@ find * -type f \
   -and -not -path 'target*' \
   -and -not -path '.bundle*' \
   -and -not -path 'bundle*' \
+  -and -not -path 'public/uploads*' \
+  -and -not -path '*.ttf' \
+  -and -not -path '*.eot' \
+  -and -not -path '*.woff' \
+  -and -not -path '*.svg' \
+  -and -not -path '*.gif' \
+  -and -not -path '*.jpg' \
+  -and -not -path '*.png' \
   -and -not -path 'log*' \
   -and -not -path '*.keep' \
   -and -not -path 'java/target*' \
