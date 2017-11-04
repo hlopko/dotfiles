@@ -1,52 +1,45 @@
 autoload -U colors && colors
 setopt PROMPT_SUBST
 
-YELLOW="%{$fg[yellow]%}"
-RED="%{$fg[red]%}"
-GRAY="%{$fg[gray]%}"
-GREEN="%{$fg[green]%}"
-NORMAL="%{$reset_color%}"
+local SMILEY="%(?.%{$fg[yellow]%}:)%{$reset_color%}.%{$fg[red]%}:(%{$reset_color%})"
+local CURRENT_PATH="%{$fg[gray]%}%3c%{$reset_color%}"
+local LAST_CMD_DURATION="$MH_LAST_CMD_DURATION"
 
-local SMILEY="%(?.$YELLOW:)$NORMAL.$RED:($NORMAL)"
-local CURRENT_PATH="$GRAY%3c$NORMAL"
+PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(hg_prompt) '
 
-PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(svn_prompt) '
-
-function __update_prompt_vars {
-	git_prompt
-	#svn_prompt
-}
-
-function svn_prompt {
-	if `svn info > /dev/null 2>&1`; then
-		local REVISION=`svn info | awk '/Revision/{print $2}'`
-		echo "$GREEN""[r$REVISION]""$NORMAL"
+function git_prompt {
+	if [ -d .git ] || [ -d ../.git ] || git rev-parse --git-dir &> /dev/null; then
+    local TIME=`git log --pretty=format:'%at' -1`
+		local MINUTES=`nice_minutes $TIME`
+		local BRANCH=`git rev-parse --abbrev-ref HEAD`
+		echo "%{$fg[green]%}(%{$fg[red]%}git:%{$fg[green]%}$BRANCH|$MINUTES%{$fg[green]%})%{$reset_color%}"
 	fi
 }
 
-function git_prompt {
-	if `git status > /dev/null 2>&1`; then
-		local MINUTES=`nice_minutes`
-		local BRANCH=`git rev-parse --abbrev-ref HEAD`
-		echo "$GREEN($BRANCH|$MINUTES$GREEN)$NORMAL"
+function hg_prompt {
+	if [ -d .hg ] || [ -d ../.hg ] || hg root &> /dev/null; then
+    local TIME=`hg log --template '{date}' -l1`
+    TIME=`printf -v int %.0f "$TIME"`
+		local MINUTES=`nice_minutes $TIME`
+		local BRANCH="`hg log -l1 -r . --template '{firstline(desc)}'`"
+		echo "%{$fg[green]%}(%{$fg[blue]%}fig:%{$fg[green]%}$BRANCH|$MINUTES%{$fg[green]%})%{$reset_color%}"
 	fi
 }
 
 function nice_minutes {
-	local MINUTES=`minutes`
-	local MINUTES_HR=`minutesHR`
+	local MINUTES=`minutes $1`
+	local MINUTES_HR=`minutesHR $1`
 	if [ "$MINUTES" -gt 30 ]; then
-		local COLOR=$RED
+    echo "%{$fg[red]%}$MINUTES_HR%{$reset_color%}"
 	elif [ "$MINUTES" -gt 10 ]; then
-		local COLOR=$YELLOW
+    echo "%{$fg[yellow]%}$MINUTES_HR%{$reset_color%}"
 	else
-		local COLOR=$GREEN
+    echo "%{$fg[green]%}$MINUTES_HR%{$reset_color%}"
 	fi
-	echo "$COLOR$MINUTES_HR"
 }
 
 function minutesHR {
-	local mins=`minutes`
+	local mins=`minutes $1`
 	local hours=$((mins/60))
 	local days=$((hours/24))
 	if [ $mins -lt 100 ]; then
@@ -60,11 +53,10 @@ function minutesHR {
 
 function minutes {
     local now=`date +%s`
-    local last_commit=`git log --pretty=format:'%at' -1`
+    local last_commit=$1
     local seconds=$((now-last_commit))
 	local mins=$((seconds/60))
 	echo $mins
 }
-
 
 
