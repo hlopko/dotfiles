@@ -1,106 +1,45 @@
 [user]
 	name = Marcel Hlopko
-	email = marcel.hlopko@gmail.com
-	signingkey = Marcel Hlopko <marcel@hlopko.com>
+	email = hlopko@google.com
 [github]
-	user = mhlopko
-[color]
-	ui = auto
-[push]
-	default = upstream
-[alias]
-	whoami = log -1 --pretty=%B
-	co = checkout
-	br = branch
-	c = commit
-	ca = commit -a
-	s = status
-	b = branch
-	di = diff
-	dc = diff --cached
-	aa = add --all
-	ai = add -i
-	ap = add -p
-	ff = merge --ff-only
-	noff = merge --no--ff
-	l = log --graph --abbrev-commit --date=relative --remotes
-	la = !git l --all
-	div = divergence
-	gn = goodness
-	gnc = goodness --cached
-	fa = fetch --all
-	pom = push origin master
-	ds = diff --stat=160,120
-	zip = archive --format zip --output
-	# Get the current branch name (not so useful in itself, but used in
-	# other aliases)
-	branch-name = "!git rev-parse --abbrev-ref HEAD"
-	# Push the current branch to the remote "origin", and set it to track
-	# the upstream branch
-	publish = "!git push -u origin $(git branch-name)"
-	# Delete the remote version of the current branch
-	unpublish = "!git push origin :$(git branch-name)"
-	# Fire up your difftool (e.g. Kaleidescope) with all the changes that
-	# are on the current branch.
-	code-review = difftool origin/master...
-	# Unstage any files that have been added to the staging area
-	unstage = reset HEAD
-	# Show changes that have been staged
-	diffc = diff --cached
-
-	# Checkout our version of a file and add it
-	ours = "!f() { git checkout --ours $@ && git add $@; }; f"
-	# Checkout their version of a file and add it
-	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
-
-	# Delete any branches that have been merged into master
-	delete-merged-branches = "!git co master && git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
-
-	# diff current HEAD against master (this is what you want 90% of the time if you work in topic branches)
-	compare = diff HEAD..master --
-	# list git bins (lots of gems in there)
-	bin = !find $(git --exec-path) -type f | xargs basename | $(git config --get core.pager)
-	ctags = !.git/hooks/ctags
-	serve = !git daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
-	incoming = !git fetch && git log ..@{u}
-	outgoing = !git fetch && git log @{u}..
-	incoming-diff = !git fetch && git difftool ..@{u}
-	outgoing-diff = !git fetch && git difftool @{u}..
-[mergetool "fugitive"]
-	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
-[diff "ruby"]
-	funcname = "^ *\\(\\(def\\) .*\\)"
-[merge]
-	tool = fugitive
-	confictstyle = diff3
-	summary = true
-[merge "bundle"]
-	name = bundle
-	driver = bundle
-[merge "railsschema"]
-	name = newer Rails schema version
-	driver = hookup resolve-schema %A %O %B %L
-[format]
-	pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
-[blame]
-	;date=local
-[branch]
-	autosetuprebase = always
-[credential]
-	helper = cache --timeout=3600
-[git-up "bundler"]
-	check = true
-	autoinstall = true
-[git-up "fetch"]
-	all = true
-[mergetool]
-	keepBackup = false
+        user = mhlopko
 [core]
-	pager = less -F -X
-	whitespace = trailing-space,space-before-tab
-[init]
-	templatedir = ~/.git_template
+        autocrlf = false
+        filemode = false
+[color]
+        ui = true
+[alias]
+        co = checkout
+        c = commit
+        s = status
+        b = branch
+        di = diff
+        dc = diff --cached
+        aa = add --all
+        l = log --graph --abbrev-commit --date=relative --remotes
+        ctags = !.git/hooks/ctags
+	ll = log --stat
+	lg = log
+	lp = log -p
+[mergetool "fugitive"]
+        cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
+[merge]
+        tool = fugitive
+        confictstyle = diff3
+        summary = true
+[format]
+        ; pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+[blame]
+        ;date=local
+[branch]
+        autosetuprebase = always
+[mergetool]
+        keepBackup = false
+[core]
+        pager = less -F -X
+        whitespace = trailing-space,space-before-tab
+	excludesfile = ~/.gitignore
 [interactive]
-	singlekey = true
-[commit]
-	gpgsign = true
+        singlekey = true
+[http]
+	cookiefile = /usr/local/google/home/hlopko/.gitcookies

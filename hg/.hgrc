@@ -1,23 +1,25 @@
 [ui]
-username = Marcel Hlopko <marcel@hlopko.com>
-editor = vim
+username = hlopko
+merge = nvimdiff
 
-[pager]
-pager = LESS='FRX' less
-
-[auth]
-bb.prefix = https://bitbucket.org
-bb.username = mhlopko
-
-[extensions]
-mercurial_keyring =
-color =
-graphlog =
-pager =
-mq =
-rebase =
-record =
+[merge-tools]
+nvimdiff.executable = nvim
+nvimdiff.args = -d $base $local $output $other +close +close
+nvimdiff.premerge = keep
 
 [alias]
-c = commit
-s = status
+borrow = !p4 pack -c $1 | sed "/^\t/s/\t//p ; /^====.*====\$/,\$p ; d" | $HG import -e - -p0
+
+[trainingwheels]
+revert--all=false
+merge=false
+
+[extensions]
+purge =
+churn =
+
+[pager]
+ignore = version, log, status
+
+[experimental]
+allowdivergence=True
