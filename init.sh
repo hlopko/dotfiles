@@ -2,33 +2,30 @@
 
 set -e
 
-apt_packages="vim-gnome xstow tree ruby ruby-dev mutt offlineimap "\
-"msmtp-gnome tmux zsh"
+APT_PACKAGES=( neovim xstow tree zsh )
+BREW_PACKAGES=( neovim stow tree zsh )
+CONFIGS_TO_BE_LINKED=( bin gdb git hg config )
 
-# sudo apt-get install -y $apt_packages
-
+if [[ "${OSTYPE}" = darwin* ]];
+then
+  if ! type brew &> /dev/null;
+  then
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+  brew install ${BREW_PACKAGES}
+elif [[ "${OSTYPE}" = "linux-gnu" ]];
+then
+  sudo apt-get install -y ${APT_PACKAGES}
+else
+  echo "OSTYPE not recognized: '${OSTYPE}'"
+  exit 1
+fi
 echo "Done installing packages"
 
-packages_to_be_linked=( bin gdb git hg )
-
-if [[ $1 = "clean" ]]; then
-	ARGS="-D"
-else
-	ARGS="-S"
-fi
-
-for package in "${packages_to_be_linked[@]}"
+for package in "${CONFIGS_TO_BE_LINKED[@]}"
 do
-	stow $ARGS $package
+  stow -S $package
 done
-
 echo "Done symlinking"
 
-# if [[ ! $1 = "clean" ]]; then
-# 	if [[ ! $1 = "fast" ]]; then
-# 		screen -D -m vim -X +PluginInstall +qall
-# 		echo "Done installing vim plugins"
-# 	fi
-# fi
-
-echo "Done initializing dotfiles"
+echo "Tadaaa"

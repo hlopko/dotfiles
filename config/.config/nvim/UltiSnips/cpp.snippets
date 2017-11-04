@@ -1,0 +1,14 @@
+snippet vtw
+DECLARE_VIRTUAL_TRACE_WRAPPERS();
+endsnippet
+
+snippet tw
+DECLARE_TRACE_WRAPPERS();
+endsnippet
+
+snippet dtw
+DEFINE_TRACE_WRAPPERS($1)
+{
+		visitor->traceWrappers($0);
+}
+endsnippet
