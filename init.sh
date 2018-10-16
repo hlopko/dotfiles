@@ -2,8 +2,8 @@
 
 set -e
 
-APT_PACKAGES=( neovim xstow tree zsh i3 )
-BREW_PACKAGES=( neovim stow tree zsh )
+APT_PACKAGES=( neovim stow tree zsh i3 htop )
+BREW_PACKAGES=( neovim stow tree zsh htop )
 CONFIGS_TO_BE_LINKED=( bin gdb git hg config zsh )
 
 if [[ "${OSTYPE}" = darwin* ]];
