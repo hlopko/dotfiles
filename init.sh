@@ -2,7 +2,7 @@
 
 set -e
 
-APT_PACKAGES=( neovim xstow tree zsh )
+APT_PACKAGES=( neovim xstow tree zsh i3 )
 BREW_PACKAGES=( neovim stow tree zsh )
 CONFIGS_TO_BE_LINKED=( bin gdb git hg config )
 
