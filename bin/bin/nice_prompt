@@ -6,57 +6,29 @@ local CURRENT_PATH="%{$fg[gray]%}%3c%{$reset_color%}"
 local LAST_CMD_DURATION="$MH_LAST_CMD_DURATION"
 
 PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(hg_prompt) '
-
 function git_prompt {
 	if [ -d .git ] || [ -d ../.git ] || git rev-parse --git-dir &> /dev/null; then
-    local TIME=`git log --pretty=format:'%at' -1`
-		local MINUTES=`nice_minutes $TIME`
 		local BRANCH=`git rev-parse --abbrev-ref HEAD`
-		echo "%{$fg[green]%}(%{$fg[red]%}git:%{$fg[green]%}$BRANCH|$MINUTES%{$fg[green]%})%{$reset_color%}"
+		echo "%{$fg[green]%}(%{$fg[red]%}git:%{$fg[green]%}$BRANCH%{$fg[green]%})%{$reset_color%}"
 	fi
+}
+
+function ascend {
+  dir="$PWD"
+  while [[ $dir != "/" ]]; do
+    if [ -f $dir/$1 ]; then
+      echo "$dir/$1"
+    fi
+    dir="$(dirname $dir)"
+  done
 }
 
 function hg_prompt {
-	if [ -d .hg ] || [ -d ../.hg ] || hg root &> /dev/null; then
-    local TIME=`hg log --template '{date}' -l1`
-    TIME=`printf -v int %.0f "$TIME"`
-		local MINUTES=`nice_minutes $TIME`
-		local BRANCH="`hg log -l1 -r . --template '{firstline(desc)}'`"
-		echo "%{$fg[green]%}(%{$fg[blue]%}fig:%{$fg[green]%}$BRANCH|$MINUTES%{$fg[green]%})%{$reset_color%}"
-	fi
+  number_file="$(ascend .fig_cl_number)"
+  desc_file="$(ascend .fig_cl_description)"
+  if [ -f "$number_file" ]; then
+    echo "%{$fg[green]%}(\
+%{$fg[blue]%}http://$(cat "$number_file")%{$fg[green]%} - \
+$(cat "$desc_file")%{$fg[green]%})%{$reset_color%}"
+  fi
 }
-
-function nice_minutes {
-	local MINUTES=`minutes $1`
-	local MINUTES_HR=`minutesHR $1`
-	if [ "$MINUTES" -gt 30 ]; then
-    echo "%{$fg[red]%}$MINUTES_HR%{$reset_color%}"
-	elif [ "$MINUTES" -gt 10 ]; then
-    echo "%{$fg[yellow]%}$MINUTES_HR%{$reset_color%}"
-	else
-    echo "%{$fg[green]%}$MINUTES_HR%{$reset_color%}"
-	fi
-}
-
-function minutesHR {
-	local mins=`minutes $1`
-	local hours=$((mins/60))
-	local days=$((hours/24))
-	if [ $mins -lt 100 ]; then
-		echo "${mins}m"
-	elif [ $hours -lt 72 ]; then
-		echo "${hours}h"
-	else
-		echo "${days}d"
-	fi
-}
-
-function minutes {
-    local now=`date +%s`
-    local last_commit=$1
-    local seconds=$((now-last_commit))
-	local mins=$((seconds/60))
-	echo $mins
-}
-
-
