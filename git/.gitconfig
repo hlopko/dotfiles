@@ -42,4 +42,6 @@
 [interactive]
         singlekey = true
 [http]
-	cookiefile = /usr/local/google/home/hlopko/.gitcookies
+  cookiefile = /usr/local/google/home/hlopko/.gitcookies
+[push]
+	default = current
