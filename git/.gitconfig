@@ -2,7 +2,7 @@
 	name = Marcel Hlopko
 	email = hlopko@google.com
 [github]
-        user = mhlopko
+        user = hlopko
 [core]
         autocrlf = false
         filemode = false
@@ -40,7 +40,7 @@
         whitespace = trailing-space,space-before-tab
 	excludesfile = ~/.gitignore
 [interactive]
-        singlekey = true
+	singleKey = yes
 [http]
   cookiefile = /usr/local/google/home/hlopko/.gitcookies
 [push]

@@ -14,6 +14,8 @@ Plug 'tpope/vim-rails', { 'for': ['ruby', 'eruby'] }
 Plug 'rust-lang/rust.vim'
 " Plug 'Valloric/YouCompleteMe', { 'for': [ 'c', 'cpp' ], 'do': './install.py --clang-completer' }
 " autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'sebastianmarkow/deoplete-rust'
 
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -315,3 +317,13 @@ nnoremap <leader>y :!yardstick %<cr>
 set gdefault
 
 let g:rustfmt_autosave = 1
+
+let b:deoplete_disable_auto_complete=1
+let g:deoplete_disable_auto_complete=1
+let g:deoplete#sources = {}
+" Disable the candidates in Comment/String syntaxes.
+call deoplete#custom#source('_',
+      \ 'disabled_syntaxes', ['Comment', 'String'])
+call deoplete#custom#option('sources', {
+    \ 'python': ['LanguageClient'],
+\})

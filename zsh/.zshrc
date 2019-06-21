@@ -40,7 +40,7 @@ alias dv8='cd ~/projects/v8/v8'
 alias dchrome='cd ~/projects/chromium/src'
 alias dblaze='cd ~/projects/blaze/google3'
 alias dbazel='cd ~/projects/bazel'
-alias s='[ -d .git ] && git s || hg status'
+alias s='git s'
 alias e='exit'
 alias a='git add -p'
 alias c='git c'
@@ -49,6 +49,10 @@ alias gp='git push'
 alias pp='git pull && git push'
 alias tmux='TERM=xterm-256color tmux -2'
 alias ag='ag -i'
+alias ll='ls -la'
+alias bz='bazel build //src:bazel'
+alias bb='bazel build //src:bazel'
+alias bzl='~/projects/bazel/bazel-bin/src/bazel'
 
 hr(){printf '\e[32m━%.0s\e[39m' $(seq $COLUMNS)}
 
@@ -156,3 +160,17 @@ fi
 
 eval `dircolors ~/.dir_colors/dircolors`
 export PATH="/usr/local/google/home/hlopko/projects/clones/arc/arcanist/bin:$PATH"
+export ANDROID_HOME="$(echo $HOME)/Android/Sdk"
+export ANDROID_NDK_HOME="$(echo $HOME)/Android/Sdk/ndk-bundle"
+
+source /usr/local/share/chruby/chruby.sh
+
+# Install Ruby Gems to ~/gems
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH:$HOME/go/bin"
+# export SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh
+
+
+function fix_capslock() {
+  setxkbmap -layout us -option ctrl:nocaps
+}

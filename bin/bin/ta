@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+from todoist.api import TodoistAPI
+import sys
+import os
+
+with open(os.path.expandvars("$HOME/secret/todoist_api_key"), 'r') as file:
+    api_key = file.read().strip()
+
+api = TodoistAPI(api_key)
+api.sync()
+api.items.add(" ".join(sys.argv[1:]))
+api.commit()
