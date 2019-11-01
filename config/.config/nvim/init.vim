@@ -27,7 +27,7 @@ Plug 'tpope/vim-rails'
 Plug 'peeja/vim-cdo'
 Plug 'vim-scripts/restore_view.vim'
 Plug 'nelstrom/vim-visual-star-search'
-Plug 'rking/ag.vim'
+Plug 'jremmen/vim-ripgrep'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'noprompt/vim-yardoc', { 'for': ['ruby', 'eruby'] }
 Plug 'AndrewRadev/splitjoin.vim', { 'for': ['ruby', 'eruby', 'coffees'] }
