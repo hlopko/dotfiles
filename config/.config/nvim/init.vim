@@ -1,21 +1,12 @@
 call plug#begin('~/.config/nvim/bundle')
 Plug 'tpope/vim-sensible'
-Plug 'vimwiki/vimwiki'
 Plug 'benekastah/neomake'
-Plug 'kchmck/vim-coffee-script'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-endwise', { 'for': ['ruby', 'eruby'] }
-Plug 'tpope/vim-bundler', { 'for': ['ruby', 'eruby'] }
+Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-rake', { 'for': ['ruby', 'eruby'] }
-Plug 'tpope/vim-rails', { 'for': ['ruby', 'eruby'] }
 Plug 'rust-lang/rust.vim'
-" Plug 'Valloric/YouCompleteMe', { 'for': [ 'c', 'cpp' ], 'do': './install.py --clang-completer' }
-" autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'sebastianmarkow/deoplete-rust'
 
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -23,13 +14,11 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-eunuch'
 Plug 'Soares/butane.vim'
 Plug 'vim-ruby/vim-ruby'
-Plug 'tpope/vim-rails'
 Plug 'peeja/vim-cdo'
 Plug 'vim-scripts/restore_view.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'jremmen/vim-ripgrep'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'noprompt/vim-yardoc', { 'for': ['ruby', 'eruby'] }
 Plug 'AndrewRadev/splitjoin.vim', { 'for': ['ruby', 'eruby', 'coffees'] }
 Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
 Plug 'ntpeters/vim-better-whitespace'
@@ -37,7 +26,6 @@ Plug '/home/m/Projects/vim/witness_protection'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'radenling/vim-dispatch-neovim'
-Plug 'chazy/cscope_maps'
 call plug#end()
 
 set tags=TAGS;tags;
@@ -306,24 +294,10 @@ endfunction
 
 nnoremap <silent> ,A :call GetSpec()<cr><cr>
 
-let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
-let g:neomake_coffeescript_enabled_makers = ['coffeelint']
 autocmd! BufWritePost * Neomake
 
 noremap <leader>x  WW:Bclose<cr>
 
-nnoremap <leader>y :!yardstick %<cr>
-
 set gdefault
 
 let g:rustfmt_autosave = 1
-
-let b:deoplete_disable_auto_complete=1
-let g:deoplete_disable_auto_complete=1
-let g:deoplete#sources = {}
-" Disable the candidates in Comment/String syntaxes.
-call deoplete#custom#source('_',
-      \ 'disabled_syntaxes', ['Comment', 'String'])
-call deoplete#custom#option('sources', {
-    \ 'python': ['LanguageClient'],
-\})
