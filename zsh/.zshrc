@@ -1,5 +1,3 @@
-# Set up the prompt
-
 autoload -Uz colors && colors
 autoload -Uz promptinit
 promptinit
@@ -9,9 +7,8 @@ setopt histignorealldups sharehistory
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 HISTFILE=~/.zsh_history
 
 # Use modern completion system
@@ -21,54 +18,35 @@ compinit
 unsetopt correct_all
 unsetopt correct
 ZSH=$HOME/.oh-my-zsh
-export EDITOR='nvim'
-export GYP_GENERATORS=ninja
-export GYP_CHROMIUM_NO_ACTION=1
-export NINJA_STATUS="[%f/%r/%u] "
 
-plugins=(git mercurial)
+export EDITOR='nvim'
+
+plugins=(git)
 export ZSH_THEME=sunrise
 
 source $ZSH/oh-my-zsh.sh
 
-alias sagu='sudo apt-get update'
-alias sagr='sudo apt-get upgrade'
-alias sagi='sudo apt-get install'
-alias sacs='sudo apt-cache search'
-alias sagp='sudo apt-get purge'
-alias dv8='cd ~/projects/v8/v8'
-alias dchrome='cd ~/projects/chromium/src'
-alias dblaze='cd ~/projects/blaze/google3'
 alias dbazel='cd ~/projects/bazel'
 alias s='git s'
 alias e='exit'
 alias a='git add -p'
 alias c='git c'
-alias gl='git pull'
-alias gp='git push'
-alias pp='git pull && git push'
 alias tmux='TERM=xterm-256color tmux -2'
-alias ag='ag -i'
 alias ll='ls -la'
-alias bz='bazel build //src:bazel'
-alias bb='bazel build //src:bazel'
+alias bz='bazel build //src:bazel -c opt'
+alias bb='blaze build //devtools/blaze -c opt'
 alias bzl='~/projects/bazel/bazel-bin/src/bazel'
 
 hr(){printf '\e[32m━%.0s\e[39m' $(seq $COLUMNS)}
 
 if [ -d "$HOME/bin" ] ; then
-  PATH="$PATH:$HOME/.cargo/bin:$HOME/bin:$HOME/projects/arc/arcanist/bin"
-fi
-
-if [ -d /usr/local/google/home/hlopko/depot_tools ] ; then
-  PATH="/usr/local/google/home/hlopko/depot_tools:$PATH"
+  PATH="$PATH:$HOME/.cargo/bin:$HOME/bin"
 fi
 
 # bindkey '\e[3~' delete-char #make del working
 bindkey '^R' history-incremental-search-backward #bind rev-search to ctrl-r
 typeset -A key
 
-#make some chars behaving nicely
 key[Home]=${terminfo[khome]}
 
 key[End]=${terminfo[kend]}
@@ -105,11 +83,9 @@ if [[ -n ${terminfo[smkx]} ]] && [[ -n ${terminfo[rmkx]} ]]; then
   zle -N zle-line-finish
 fi
 
-# if [[ -f ~/bin/nice_prompt ]]; then
+if [[ -f ~/bin/nice_prompt ]]; then
 	source ~/bin/nice_prompt
-# fi
-#
-source /etc/bash_completion.d/g4d
+fi
 
 autoload -U edit-command-line
 zle -N edit-command-line
@@ -142,11 +118,9 @@ export BPURPLe='\033[1;35m'      # Purple
 export BCYAN='\033[1;36m'        # Cyan
 export BWHITE='\033[1;37m'       # White
 
-source ~/.dev_functions
+[ -f ~/.dev_functions ] && source ~/.dev_functions
 
 export REPORTTIME=3
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/google/home/${USER}/yourkit/bin/linux-x86-64/
-
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f /usr/local/google/home/hlopko/Downloads/google-cloud-sdk/path.zsh.inc ]; then
@@ -158,18 +132,8 @@ if [ -f /usr/local/google/home/hlopko/Downloads/google-cloud-sdk/completion.zsh.
   source '/usr/local/google/home/hlopko/Downloads/google-cloud-sdk/completion.zsh.inc'
 fi
 
-eval `dircolors ~/.dir_colors/dircolors`
-export PATH="/usr/local/google/home/hlopko/projects/clones/arc/arcanist/bin:$PATH"
-export ANDROID_HOME="$(echo $HOME)/Android/Sdk"
-export ANDROID_NDK_HOME="$(echo $HOME)/Android/Sdk/ndk-bundle"
-
-source /usr/local/share/chruby/chruby.sh
-
-# Install Ruby Gems to ~/gems
-export GEM_HOME="$HOME/gems"
-export PATH="$HOME/gems/bin:$PATH:$HOME/go/bin"
-# export SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh
-
+export ANDROID_HOME="$HOME/Android/Sdk"
+export ANDROID_NDK_HOME="$HOME/Android/Sdk/ndk-bundle"
 
 function fix_capslock() {
   setxkbmap -layout us -option ctrl:nocaps
