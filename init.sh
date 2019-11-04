@@ -28,4 +28,5 @@ do
 done
 echo "Done symlinking"
 
+mkdir ~/.bazel_disk_cache
 echo "Tadaaa"
