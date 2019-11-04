@@ -21,8 +21,7 @@ ZSH=$HOME/.oh-my-zsh
 
 export EDITOR='nvim'
 
-plugins=(git)
-export ZSH_THEME=sunrise
+plugins=(git cargo rust command-not-found github)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -36,6 +35,7 @@ alias ll='ls -la'
 alias bz='bazel build //src:bazel -c opt'
 alias bb='blaze build //devtools/blaze -c opt'
 alias bzl='~/projects/bazel/bazel-bin/src/bazel'
+alias bazel='bazelisk'
 
 hr(){printf '\e[32m━%.0s\e[39m' $(seq $COLUMNS)}
 
