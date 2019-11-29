@@ -7,7 +7,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
 Plug 'rust-lang/rust.vim'
-
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
@@ -26,6 +25,10 @@ Plug '/home/m/Projects/vim/witness_protection'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'radenling/vim-dispatch-neovim'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 call plug#end()
 
 set tags=TAGS;tags;
@@ -237,67 +240,22 @@ nnoremap <leader>r :Copen!<cr>
 
 nmap <leader>q :StripWhitespace<cr>
 
-nnoremap <leader>t :call RunTestFile()<cr>
-nnoremap <leader>T :call RunNearestTest()<cr>
-
-function! RunTestFile(...)
-  if a:0
-    let command_suffix = a:1
-  else
-    let command_suffix = ""
-  endif
-
-  " Run the tests for the previously-marked file.
-  let in_test_file = match(expand("%"), '_spec.rb$') != -1
-  if in_test_file
-    call SetTestFile()
-  elseif !exists("t:grb_test_file")
-    return
-  end
-  call RunTests(t:grb_test_file . command_suffix)
-endfunction
-
-function! RunNearestTest()
-  let spec_line_number = line('.')
-  call RunTestFile(":" . spec_line_number . " -b")
-endfunction
-
-function! SetTestFile()
-  " Set the spec file that tests will be run for.
-  let t:grb_test_file=@%
-endfunction
-
-function! RunTests(filename)
-  " Write the file and run tests for the given filename
-  :w
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  if filereadable("/home/m/bin/gbtest")
-    exec ":Dispatch gbtest " . a:filename
-  else
-    exec ":!rspec --color " . a:filename
-  end
-endfunction
-
-" Open or create spec file
-function! GetSpec()
-        let spec_path=substitute(expand("%:p:h"), "/app/", "/spec/", "")."/"
-        let mkdir_command=":!mkdir -p ".spec_path
-        silent exec mkdir_command
-        let ruby_prog=expand("%:t:r")
-        let param_array=split(ruby_prog, '[A-Z][a-z]\+\zs')
-        let params=join(param_array, "_")
-        let g:spec=spec_path.params."_spec.rb"
-        redraw!
-        let editcmd="e ".g:spec
-        silent exec editcmd
-endfunction
-
-nnoremap <silent> ,A :call GetSpec()<cr><cr>
-
-autocmd! BufWritePost * Neomake
-
 noremap <leader>x  WW:Bclose<cr>
 
 set gdefault
 
 let g:rustfmt_autosave = 1
+
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'cpp': ['clangd'],
+    \ }
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
