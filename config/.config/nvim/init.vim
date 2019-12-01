@@ -11,6 +11,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-eunuch'
+Plug 'SirVer/ultisnips'
 Plug 'Soares/butane.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'peeja/vim-cdo'
@@ -25,6 +26,8 @@ Plug '/home/m/Projects/vim/witness_protection'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'radenling/vim-dispatch-neovim'
+Plug 'dense-analysis/ale'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -254,8 +257,32 @@ let g:LanguageClient_serverCommands = {
     \ 'cpp': ['clangd'],
     \ }
 
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" LanguageClient
+let g:LanguageClient_autoStart = 1
+
+nnoremap <leader>a :call LanguageClient_contextMenu()<CR>
 " Or map each action separately
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+nnoremap <silent> R :call LanguageClient#textDocument_references()<CR>
+nnoremap <silent> <leader>r :call LanguageClient#textDocument_rename()<CR>
+
+" Ultisnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" ALE
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'cpp': ['clangtidy'],
+\}
+
+let g:ale_linters = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'cpp': ['clangtidy'],
+\}
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+

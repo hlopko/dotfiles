@@ -1,14 +1,25 @@
-snippet vtw
-DECLARE_VIRTUAL_TRACE_WRAPPERS();
-endsnippet
+snippet cla "An entire .h generator" b
+#ifndef ${2:`!v substitute(vim_snippets#Filename('$1_H','ClassName'),'.*','\U&\E','')`}
+#define $2
 
-snippet tw
-DECLARE_TRACE_WRAPPERS();
-endsnippet
-
-snippet dtw
-DEFINE_TRACE_WRAPPERS($1)
+class ${1:`!v substitute(substitute(vim_snippets#Filename('$1','ClassName'),'^.','\u&',''), '_\(\w\)', '\u\1', 'g')`}
 {
-		visitor->traceWrappers($0);
-}
+private:
+	$3
+
+public:
+	$1();
+	virtual ~$1();
+};
+
+#endif /* $2 */
+endsnippet
+
+snippet hg "Header quard generator" b
+#ifndef ${1: FOO_BAR_BAZ_H_}
+#define $1
+
+$2
+
+#endif /* $1 */
 endsnippet
