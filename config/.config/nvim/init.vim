@@ -19,12 +19,8 @@ Plug 'peeja/vim-cdo'
 Plug 'vim-scripts/restore_view.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'jremmen/vim-ripgrep'
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'AndrewRadev/splitjoin.vim', { 'for': ['ruby', 'eruby', 'coffees'] }
-Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
 Plug 'ntpeters/vim-better-whitespace'
-Plug '/home/m/Projects/vim/witness_protection'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'radenling/vim-dispatch-neovim'
 Plug 'dense-analysis/ale'
@@ -217,9 +213,6 @@ nnoremap <C-l> <C-W>l
 " Fuzzy select one of those. Open the selected file with :e.
 nnoremap <leader>f :call fzf#run({'source': 'find_files_exclude_boring .', 'sink': 'e'})<cr>
 
-" redraw vim
-nnoremap <leader>R :redraw!<cr>
-
 nnoremap <leader>Q :call ToggleQuickfix()<cr>
 
 " :edit in file in the same dir as current file shortcuts
@@ -238,9 +231,6 @@ noremap Q <ESC>
 nnoremap <silent> ,A :call GetSpec()<cr><cr>
 
 nmap <leader>q :StripWhitespace<cr>
-
-" Open raw quick fix window
-nnoremap <leader>r :Copen!<cr>
 
 nmap <leader>q :StripWhitespace<cr>
 
