@@ -35,5 +35,5 @@ colors:
 # Font configuration (changes require restart)
 font:
   normal:
-    family: Iosevka
-  size: 17.0
+    family: "Iosevka Term"
+  size: 15.0
