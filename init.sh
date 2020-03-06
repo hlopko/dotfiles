@@ -4,7 +4,7 @@ set -e
 
 APT_PACKAGES=( neovim stow tree zsh i3 htop i3status alacritty ripgrep rofi )
 BREW_PACKAGES=( neovim stow tree zsh htop )
-CONFIGS_TO_BE_LINKED=( bin gdb git hg config zsh gpg )
+CONFIGS_TO_BE_LINKED=( bin gdb git hg config zsh gpg tmux )
 
 if [[ "${OSTYPE}" = darwin* ]];
 then

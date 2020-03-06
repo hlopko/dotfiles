@@ -24,6 +24,7 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'radenling/vim-dispatch-neovim'
 Plug 'dense-analysis/ale'
+Plug 'keith/swift.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -253,7 +254,7 @@ let g:LanguageClient_autoStart = 1
 
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
+
 nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
 nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
 nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>

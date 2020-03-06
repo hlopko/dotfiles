@@ -122,19 +122,7 @@ export BWHITE='\033[1;37m'       # White
 
 export REPORTTIME=3
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f /usr/local/google/home/hlopko/Downloads/google-cloud-sdk/path.zsh.inc ]; then
-  source '/usr/local/google/home/hlopko/Downloads/google-cloud-sdk/path.zsh.inc'
-fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f /usr/local/google/home/hlopko/Downloads/google-cloud-sdk/completion.zsh.inc ]; then
-  source '/usr/local/google/home/hlopko/Downloads/google-cloud-sdk/completion.zsh.inc'
-fi
-
-export ANDROID_HOME="$HOME/Android/Sdk"
-export ANDROID_NDK_HOME="$HOME/Android/Sdk/ndk-bundle"
-
 function fix_capslock() {
   setxkbmap -layout us -option ctrl:nocaps
 }
+work() { tmx2 new-session -A -s ${1:-work}; }
