@@ -25,6 +25,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'radenling/vim-dispatch-neovim'
 Plug 'dense-analysis/ale'
 Plug 'keith/swift.vim'
+Plug 'morhetz/gruvbox'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -47,7 +48,7 @@ set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 " map <C-I> :pyf clang-format.py<CR>
 let c_space_errors = 1
 set background=dark
-colorscheme solarized
+colorscheme gruvbox
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 if has("multi_byte")
   set listchars=tab:▸\ ,eol:⤦
