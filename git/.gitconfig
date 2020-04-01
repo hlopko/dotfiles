@@ -21,23 +21,21 @@
 	ll = log --stat
 	lg = log
 	lp = log -p
-[mergetool "fugitive"]
-        cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
+[mergetool "nvim"]
+  cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
 [merge]
-        tool = fugitive
-        confictstyle = diff3
-        summary = true
+  tool = nvim
 [format]
-        ; pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+  pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
 [blame]
-        ;date=local
+  ;date=local
 [branch]
-        autosetuprebase = always
+  autosetuprebase = always
 [mergetool]
-        keepBackup = false
+  keepBackup = false
 [core]
-        pager = less -F -X
-        whitespace = trailing-space,space-before-tab
+  pager = less -r -F -X
+  whitespace = trailing-space,space-before-tab
 	excludesfile = ~/.gitignore
 [interactive]
 	singleKey = yes

@@ -28,8 +28,10 @@ source $ZSH/oh-my-zsh.sh
 alias dbazel='cd ~/projects/bazel'
 alias s='git s'
 alias e='exit'
-alias a='git add -p'
+alias a='git add --all -p'
 alias c='git c'
+alias gd='git diff'
+alias wip='git c --amend --no-edit'
 alias tmux='TERM=xterm-256color tmux -2'
 alias ll='ls -la'
 alias bz='bazel build //src:bazel -c opt'
@@ -125,3 +127,6 @@ function fix_capslock() {
   setxkbmap -layout us -option ctrl:nocaps
 }
 work() { tmx2 new-session -A -s ${1:-work}; }
+
+source /etc/bash_completion.d/g4d
+
