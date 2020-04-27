@@ -17,7 +17,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'vim-ruby/vim-ruby'
 Plug 'peeja/vim-cdo'
 Plug 'vim-scripts/restore_view.vim'
-Plug 'nelstrom/vim-visual-star-search'
+Plug 'bronson/vim-visual-star-search'
 Plug 'jremmen/vim-ripgrep'
 Plug 'AndrewRadev/splitjoin.vim', { 'for': ['ruby', 'eruby', 'coffees'] }
 Plug 'ntpeters/vim-better-whitespace'
@@ -26,7 +26,6 @@ Plug 'radenling/vim-dispatch-neovim'
 Plug 'dense-analysis/ale'
 Plug 'keith/swift.vim'
 Plug 'morhetz/gruvbox'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
@@ -402,3 +401,5 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+vnoremap <leader>z :<C-u>call VisualStarSearchSet('/')<CR>:%s/<C-R>=@/<CR>/
