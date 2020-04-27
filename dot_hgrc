@@ -1,0 +1,46 @@
+[ui]
+username = hlopko
+merge = nvimdiff
+
+[merge-tools]
+nvimdiff.executable = nvim
+vimdiff.args = -f -d $output -M $local $base $other -c "wincmd J" -c "set modifiable" -c "set write"
+nvimdiff.premerge = keep
+
+[alias]
+borrow = !p4 pack -c $1 | sed "/^\t/s/\t//p ; /^====.*====\$/,\$p ; d" | $HG import -e - -p0
+
+[trainingwheels]
+revert--all=false
+merge=false
+
+[extensions]
+purge =
+figstatus = /google/src/head/depot/google3/experimental/fig_contrib/prompts/fig_status/fig_status.py
+
+[pager]
+ignore = version, log, status
+
+[experimental]
+allowdivergence=True
+
+[google]
+presubmit.default-rev=only(., p4head)
+
+[hooks]
+post-pickcheckout = cache_hg_prompt
+post-checkout = cache_hg_prompt
+post-co = cache_hg_prompt
+post-uploadchain = cache_hg_prompt
+post-uc = cache_hg_prompt
+post-rebase = cache_hg_prompt
+post-update = cache_hg_prompt
+post-commit = cache_hg_prompt
+post-tag = cache_hg_prompt
+post-amend = cache_hg_prompt
+post-sync = cache_hg_prompt
+post-evolve = cache_hg_prompt
+post-split = cache_hg_prompt
+post-fold = cache_hg_prompt
+
+

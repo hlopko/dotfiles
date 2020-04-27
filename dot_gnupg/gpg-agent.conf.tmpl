@@ -1,0 +1,6 @@
+enable-ssh-support
+{{ if eq .chezmoi.hostname "hlopko-ThinkPad-X220" }}
+pinentry-program pinentry-gnome3
+{{ else }}
+pinentry-program pinentry-rofi
+{{ end }}

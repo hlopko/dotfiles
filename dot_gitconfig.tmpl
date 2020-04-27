@@ -1,0 +1,44 @@
+[user]
+  email = hlopko@google.com
+[github]
+  user = hlopko
+[core]
+  autocrlf = false
+  filemode = false
+[color]
+  ui = true
+[alias]
+  co = checkout
+  c = commit
+  s = status
+  b = branch
+  di = diff
+  dc = diff --cached
+  aa = add --all
+  l = log --graph --abbrev-commit --date=relative --remotes
+  ctags = !.git/hooks/ctags
+  ll = log --stat
+  lg = log
+  lp = log -p
+[mergetool "nvim"]
+  cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+[merge]
+  tool = nvim
+[format]
+  pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+[blame]
+  ;date=local
+[branch]
+  autosetuprebase = always
+[mergetool]
+  keepBackup = false
+[core]
+  pager = less -r -F -X
+  whitespace = trailing-space,space-before-tab
+  excludesfile = {{ .chezmoi.homedir }}/.gitignore
+[interactive]
+  singleKey = yes
+[http]
+  cookiefile = {{ .chezmoi.homedir }}/.gitcookies
+[push]
+  default = current
