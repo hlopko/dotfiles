@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -euo pipefail
-
-hub fetch bazelbuild
-git pull --rebase bazelbuild master
-git push
