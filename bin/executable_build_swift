@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cd ~/projects/swift/swift
+
+mkdir -p ../build
+
+if [[ "${1-}" == "-d" ]]; then
+  ln -nfs Ninja-RelWithDebInfoAssert+swift-DebugAssert ../build/current
+
+  ./utils/build-script \
+    --release-debuginfo \
+    --debug-swift \
+    --force-optimized-typechecker \
+    --extra-cmake-options="-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
+    --cmake-c-launcher $(which ccache) \
+    --cmake-cxx-launcher $(which ccache)
+elif [[ "${1-}" == "-o" ]]; then
+  ln -nfs Ninja-Release ../build/current
+
+  ./utils/build-script \
+    --release \
+    -R \
+    --no-assertions \
+    --cmake-c-launcher $(which ccache) \
+    --cmake-cxx-launcher $(which ccache)
+else
+  ln -nfs Ninja-ReleaseAssert+stdlib-Release ../build/current
+
+  ./utils/build-script \
+    --release \
+    --no-swift-stdlib-assertions \
+    --llbuild \
+    --cmake-c-launcher $(which ccache) \
+    --cmake-cxx-launcher $(which ccache)
+fi

@@ -8,7 +8,6 @@
     -and -not -path 'out*' \
     -and -not -path '*.o' \
     -and -not -path '*.so' \
-    -and -not -path 'doc*' \
     -and -not -path 'cache*' \
     -and -not -path '.vendor*' \
     -and -not -path 'target*' \

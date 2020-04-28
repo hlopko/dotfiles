@@ -6,7 +6,6 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
-Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
@@ -14,7 +13,6 @@ Plug 'tpope/vim-eunuch'
 Plug 'SirVer/ultisnips'
 Plug 'Soares/butane.vim'
 Plug 'vimwiki/vimwiki'
-Plug 'vim-ruby/vim-ruby'
 Plug 'peeja/vim-cdo'
 Plug 'vim-scripts/restore_view.vim'
 Plug 'bronson/vim-visual-star-search'
@@ -24,9 +22,13 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'radenling/vim-dispatch-neovim'
 Plug 'dense-analysis/ale'
-Plug 'keith/swift.vim'
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'sheerun/vim-polyglot'
+Plug 'mhinz/vim-signify'
+Plug 'rhysd/vim-clang-format'
+Plug 'kana/vim-operator-user'
+
 
 call plug#end()
 
@@ -89,6 +91,11 @@ set statusline+=\ %P   " Percentage through file
 augroup filetype_muttrc
   au!
   au FileType muttrc setlocal foldmethod=marker
+augroup end
+
+augroup filetype_swift
+  au!
+  au FileType swift set textwidth=0
 augroup end
 
 augroup filetype_java
@@ -403,3 +410,11 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 vnoremap <leader>z :<C-u>call VisualStarSearchSet('/')<CR>:%s/<C-R>=@/<CR>/
+
+"Now :SignifyBaseline HEAD^ shows you change markers for the thing you've already committed
+let g:signify_vcs_cmds = {'git':'git diff --no-color --no-ext-diff -U0 $SY_GIT_BASELINE -- %f'}
+let g:signify_vcs_cmds_diffmode = { 'git':'git show ${SY_GIT_BASELINE-HEAD}:./%f' }
+command! -nargs=1 SignifyBaseline call setenv("SY_GIT_BASELINE", <q-args>) | SignifyRefresh
+
+let g:clang_format#detect_style_file = 1
+autocmd FileType c,cpp,objc map <buffer> = <Plug>(operator-clang-format)

@@ -37,11 +37,12 @@ alias ll='ls -la'
 alias bz='bazel build //src:bazel -c opt'
 alias bb='blaze build //devtools/blaze -c opt'
 alias bzl='~/projects/bazel/bazel-bin/src/bazel'
+alias chezmoi='~/go/bin/chezmoi'
 
 hr(){printf '\e[32m━%.0s\e[39m' $(seq $COLUMNS)}
 
 if [ -d "$HOME/bin" ] ; then
-  PATH="$PATH:$HOME/.cargo/bin:$HOME/bin:$HOME/projects/swift/build/Ninja-RelWithDebInfoAssert/swift-linux-x86_64/bin"
+  PATH="$PATH:$HOME/.cargo/bin:$HOME/bin:$HOME/projects/swift/build/current/swift-linux-x86_64/bin"
 fi
 
 # bindkey '\e[3~' delete-char #make del working
