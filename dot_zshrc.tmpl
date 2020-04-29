@@ -34,9 +34,9 @@ alias ll='ls -la'
 alias bz='bazel build //src:bazel -c opt'
 alias bb='blaze build //devtools/blaze -c opt'
 alias bzl='~/projects/bazel/bazel-bin/src/bazel'
-{{ if eq .chezmoi.hostname "hlopko" }}
+{{ if eq .chezmoi.hostname "hlopko" -}}
 alias chezmoi='~/go/bin/chezmoi'
-{{ end }}
+{{ end -}}
 
 hr(){printf '\e[32m━%.0s\e[39m' $(seq $COLUMNS)}
 
@@ -128,7 +128,7 @@ function fix_capslock() {
 }
 work() { tmx2 new-session -A -s ${1:-work}; }
 
-{{ if eq .chezmoi.hostname "hlopko" }}
+{{ if eq .chezmoi.hostname "hlopko" -}}
 source /etc/bash_completion.d/g4d
-{{ end }}
+{{ end -}}
 
