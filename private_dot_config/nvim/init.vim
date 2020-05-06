@@ -418,3 +418,4 @@ command! -nargs=1 SignifyBaseline call setenv("SY_GIT_BASELINE", <q-args>) | Sig
 
 let g:clang_format#detect_style_file = 1
 autocmd FileType c,cpp,objc map <buffer> = <Plug>(operator-clang-format)
+autocmd FileType swift map <buffer> = :!swift-format % --in-place<cr><cr>
