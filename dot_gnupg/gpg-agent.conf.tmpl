@@ -1,6 +1,7 @@
 enable-ssh-support
 {{ if eq .chezmoi.hostname "hlopko-ThinkPad-X220" -}}
-pinentry-program pinentry-gnome3
+pinentry-program /usr/bin/pinentry-gnome3
 {{ else -}}
-pinentry-program pinentry-rofi
+pinentry-program /usr/bin/pinentry-rofi
 {{ end -}}
+extra-socket /home/hlopko/.gnupg/S.gpg-agent.extra
