@@ -32,5 +32,6 @@ colors:
 # Font configuration (changes require restart)
 font:
   normal:
-    family: "Iosevka"
-  size: 12.0
+    family: "Iosevka"{{ if eq .chezmoi.hostname "hlopko-ThinkPad-X220" }}
+  size: 12{{ else }}
+  size: 22{{ end }}
