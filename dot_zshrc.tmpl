@@ -133,3 +133,7 @@ work() { tmx2 new-session -A -s ${1:-work}; }
 source /etc/bash_completion.d/g4d
 {{ end -}}
 
+if [[ $REMOTEHOST == "localhost" ]]; then
+  export SSH_AGENT_PID=""
+  export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
+endif
