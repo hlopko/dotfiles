@@ -93,6 +93,11 @@ augroup filetype_muttrc
   au FileType muttrc setlocal foldmethod=marker
 augroup end
 
+augroup bzl_tmp
+  au!
+  autocmd BufNewFile,BufRead *.bzl.tmp set ft=bzl
+augroup end
+
 augroup filetype_swift
   au!
   au FileType swift set textwidth=0
