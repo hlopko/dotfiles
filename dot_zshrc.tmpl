@@ -14,6 +14,7 @@ HISTFILE=~/.zsh_history
 # Use modern completion system
 autoload -Uz compinit
 compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 unsetopt correct_all
 unsetopt correct
@@ -120,8 +121,6 @@ export BPURPLe='\033[1;35m'      # Purple
 export BCYAN='\033[1;36m'        # Cyan
 export BWHITE='\033[1;37m'       # White
 
-[ -f ~/.dev_functions ] && source ~/.dev_functions
-
 export REPORTTIME=3
 
 function fix_capslock() {
@@ -133,7 +132,11 @@ work() { tmx2 new-session -A -s ${1:-work}; }
 source /etc/bash_completion.d/g4d
 {{ end -}}
 
+{{ if ne .chezmoi.hostname "hlopko" -}}
 if [[ $REMOTEHOST == "localhost" ]]; then
   export SSH_AGENT_PID=""
   export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
 endif
+{{ end -}}
+
+[ -f ~/.local_zshrc ] && source ~/.local_zshrc
