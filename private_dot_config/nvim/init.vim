@@ -93,9 +93,9 @@ augroup filetype_muttrc
   au FileType muttrc setlocal foldmethod=marker
 augroup end
 
-augroup bzl_tmp
+augroup bzl_tpl
   au!
-  autocmd BufNewFile,BufRead *.bzl.tmp set ft=bzl
+  autocmd BufNewFile,BufRead *.bzl.tpl set ft=bzl
 augroup end
 
 augroup filetype_swift
