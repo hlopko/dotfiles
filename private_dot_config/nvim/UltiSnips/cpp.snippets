@@ -1,0 +1,14 @@
+global !p
+def header_guard():
+  snip.rv = path.replace("/", "_").replace("-", "_").replace(".", "_").upper()
+endglobal
+
+snippet hg "#ifndef ... #define ... #endif"
+#ifndef `!p header_guard()`
+#define `!p header_guard()`
+
+${0}
+
+#endif // `!p header_guard()`
+endsnippet
+
