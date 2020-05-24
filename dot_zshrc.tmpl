@@ -136,7 +136,7 @@ source /etc/bash_completion.d/g4d
 {{ if ne .chezmoi.hostname "hlopko" -}}
 if [[ $REMOTEHOST == "localhost" ]]; then
   export SSH_AGENT_PID=""
-  export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
+  export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh"
 fi
 {{ end -}}
 
