@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+
+cmake -G Ninja \
+  -DCMAKE_INSTALL_PREFIX=$HOME/tmp/llvm \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
+  -DLLVM_ENABLE_PROJECTS='libcxx;clang;libcxxabi;lld;libunwind;compiler-rt' \
+  -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld \
+  ../llvm

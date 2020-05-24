@@ -23,6 +23,7 @@ export EDITOR='nvim'
 
 plugins=(git cargo rust command-not-found github)
 
+alias bazel='bazelisk'
 alias dbazel='cd ~/projects/bazel'
 alias s='git s'
 alias e='exit'
@@ -43,7 +44,7 @@ alias chezmoi='~/go/bin/chezmoi'
 hr(){printf '\e[32m━%.0s\e[39m' $(seq $COLUMNS)}
 
 if [ -d "$HOME/bin" ] ; then
-  PATH="$PATH:$HOME/.cargo/bin:$HOME/bin:$HOME/projects/swift/build/current/swift-linux-x86_64/bin"
+  PATH="$PATH:$HOME/.cargo/bin:$HOME/go/bin:$HOME/bin:$HOME/projects/swift/build/current/swift-linux-x86_64/bin"
 fi
 
 # bindkey '\e[3~' delete-char #make del working
@@ -126,7 +127,7 @@ export REPORTTIME=3
 function fix_capslock() {
   setxkbmap -layout us -option ctrl:nocaps
 }
-work() { tmx2 new-session -A -s ${1:-work}; }
+work() { {{ if eq .chezmoi.hostname "hlopko" }}tmx2{{ else }}tmux{{ end }} new-session -A -s ${1:-work}; }
 
 {{ if eq .chezmoi.hostname "hlopko" -}}
 source /etc/bash_completion.d/g4d
@@ -136,7 +137,7 @@ source /etc/bash_completion.d/g4d
 if [[ $REMOTEHOST == "localhost" ]]; then
   export SSH_AGENT_PID=""
   export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
-endif
+fi
 {{ end -}}
 
 [ -f ~/.local_zshrc ] && source ~/.local_zshrc
