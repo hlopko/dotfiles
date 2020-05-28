@@ -28,6 +28,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'mhinz/vim-signify'
 Plug 'rhysd/vim-clang-format'
 Plug 'kana/vim-operator-user'
+Plug 'christoomey/vim-tmux-navigator'
 
 
 call plug#end()
