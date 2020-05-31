@@ -6,7 +6,10 @@ cd ~/projects/swift/swift
 
 mkdir -p ../build
 
-if [[ "${1-}" == "-d" ]]; then
+flag="${1-}"
+shift
+
+if [[ "${flag}" == "-d" ]]; then
   ln -nfs Ninja-RelWithDebInfoAssert+swift-DebugAssert ../build/current
 
   ./utils/build-script \
@@ -15,8 +18,9 @@ if [[ "${1-}" == "-d" ]]; then
     --force-optimized-typechecker \
     --extra-cmake-options="-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
     --cmake-c-launcher $(which ccache) \
-    --cmake-cxx-launcher $(which ccache)
-elif [[ "${1-}" == "-o" ]]; then
+    --cmake-cxx-launcher $(which ccache) \
+    $@
+elif [[ "${flag}" == "-o" ]]; then
   ln -nfs Ninja-Release ../build/current
 
   ./utils/build-script \
@@ -24,7 +28,8 @@ elif [[ "${1-}" == "-o" ]]; then
     -R \
     --no-assertions \
     --cmake-c-launcher $(which ccache) \
-    --cmake-cxx-launcher $(which ccache)
+    --cmake-cxx-launcher $(which ccache) \
+    $@
 else
   ln -nfs Ninja-ReleaseAssert+stdlib-Release ../build/current
 
@@ -33,5 +38,6 @@ else
     --no-swift-stdlib-assertions \
     --llbuild \
     --cmake-c-launcher $(which ccache) \
-    --cmake-cxx-launcher $(which ccache)
+    --cmake-cxx-launcher $(which ccache) \
+    $@
 fi
