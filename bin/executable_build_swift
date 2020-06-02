@@ -7,12 +7,13 @@ cd ~/projects/swift/swift
 mkdir -p ../build
 
 flag="_"
-if [[ "$#" != 1 ]]; then
+if [[ "$#" > 1 ]]; then
 flag="${1}"
 shift
 fi
 
 if [[ "${flag}" == "-d" ]]; then
+  echo "[BUILD-SWIFT]: Debug (both C++ and Swift) build"
   ln -nfs Ninja-RelWithDebInfoAssert+swift-DebugAssert ../build/current
 
   ./utils/build-script \
@@ -25,6 +26,7 @@ if [[ "${flag}" == "-d" ]]; then
     $@
     --cmake-cxx-launcher $(which ccache)
 elif [[ "${1-}" == "-do" ]]; then
+  echo "[BUILD-SWIFT]: Debug-C++ build"
   ln -nfs Ninja-RelWithDebInfoAssert ../build/current
 
   ./utils/build-script \
@@ -34,6 +36,7 @@ elif [[ "${1-}" == "-do" ]]; then
     --cmake-c-launcher $(which ccache) \
     --cmake-cxx-launcher $(which ccache)
 elif [[ "${1-}" == "-o" ]]; then
+  echo "[BUILD-SWIFT]: Optimized no-assertions build"
   ln -nfs Ninja-Release ../build/current
 
   ./utils/build-script \
@@ -44,6 +47,7 @@ elif [[ "${1-}" == "-o" ]]; then
     --cmake-cxx-launcher $(which ccache) \
     $@
 else
+  echo "[BUILD-SWIFT]: Optimized build"
   ln -nfs Ninja-ReleaseAssert+stdlib-Release ../build/current
 
   ./utils/build-script \
