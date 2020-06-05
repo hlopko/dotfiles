@@ -20,7 +20,7 @@ if [[ "${flag}" == "-d" ]]; then
     --release-debuginfo \
     --debug-swift \
     --force-optimized-typechecker \
-    --extra-cmake-options="-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
+    --extra-cmake-options="-DSWIFT_ENABLE_LLD_LINKER,-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
     --cmake-c-launcher $(which ccache) \
     --cmake-cxx-launcher $(which ccache) \
     $@
@@ -31,7 +31,7 @@ elif [[ "${1-}" == "-do" ]]; then
   ./utils/build-script \
     --release-debuginfo \
     --force-optimized-typechecker \
-    --extra-cmake-options="-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
+    --extra-cmake-options="-DSWIFT_ENABLE_LLD_LINKER,-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
     --cmake-c-launcher $(which ccache) \
     --cmake-cxx-launcher $(which ccache)
     $@
@@ -43,6 +43,7 @@ elif [[ "${1-}" == "-o" ]]; then
     --release \
     -R \
     --no-assertions \
+    --extra-cmake-options="-DSWIFT_ENABLE_LLD_LINKER" \
     --cmake-c-launcher $(which ccache) \
     --cmake-cxx-launcher $(which ccache) \
     $@
@@ -53,6 +54,7 @@ else
   ./utils/build-script \
     --release \
     --no-swift-stdlib-assertions \
+    --extra-cmake-options="-DSWIFT_ENABLE_LLD_LINKER" \
     --cmake-c-launcher $(which ccache) \
     --cmake-cxx-launcher $(which ccache) \
     $@
