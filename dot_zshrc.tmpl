@@ -41,7 +41,7 @@ alias bzl='~/projects/bazel/bazel-bin/src/bazel'
 alias chezmoi='~/go/bin/chezmoi'
 {{ end -}}
 
-hr(){printf '\e[32m━%.0s\e[39m' $(seq $COLUMNS)}
+hr(){printf '\e[32m-%.0s\e[39m' $(seq $COLUMNS)}
 
 if [ -d "$HOME/bin" ] ; then
   PATH="$PATH:$HOME/.cargo/bin:$HOME/go/bin:$HOME/bin:$HOME/projects/swift/build/current/swift-linux-x86_64/bin"
