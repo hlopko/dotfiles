@@ -20,9 +20,9 @@ if [[ "${flag}" == "-d" ]]; then
     --release-debuginfo \
     --debug-swift \
     --force-optimized-typechecker \
-    --extra-cmake-options="-DSWIFT_ENABLE_LLD_LINKER,-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
-    --cmake-c-launcher $(which ccache) \
-    --cmake-cxx-launcher $(which ccache) \
+    --extra-cmake-options="-DSWIFT_APPEND_VC_REV:BOOL=false,-DLLVM_APPEND_VC_REV:BOOL=false,-DLLVM_USE_LINKER=lld,-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
+    --cmake-c-launcher $(which gomacc) \
+    --cmake-cxx-launcher $(which gomacc) \
     $@
 else
   echo "[BUILD-SWIFT]: Release build"
@@ -30,8 +30,8 @@ else
 
   ./utils/build-script \
     --release \
-    --extra-cmake-options="-DSWIFT_ENABLE_LLD_LINKER=1" \
-    --cmake-c-launcher $(which ccache) \
-    --cmake-cxx-launcher $(which ccache) \
+    --extra-cmake-options="-DSWIFT_APPEND_VC_REV:BOOL=false-DLLVM_APPEND_VC_REV:BOOL=false,-DLLVM_USE_LINKER=lld" \
+    --cmake-c-launcher $(which gomacc) \
+    --cmake-cxx-launcher $(which gomacc) \
     $@
 fi
