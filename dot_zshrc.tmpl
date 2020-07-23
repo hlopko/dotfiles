@@ -47,7 +47,7 @@ alias chezmoi='~/go/bin/chezmoi'
 
 hr(){printf '\e[32m-%.0s\e[39m' $(seq $COLUMNS)}
 
-PATH="$HOME/projects/depot_tools:$PATH:$HOME/.cargo/bin:$HOME/go/bin:$HOME/bin:$HOME/projects/swift/build/current/swift-linux-x86_64/bin"
+PATH="$HOME/projects/depot_tools:$HOME/goma/client/out/Release:$PATH:$HOME/.cargo/bin:$HOME/go/bin:$HOME/bin:$HOME/projects/swift/build/current/swift-linux-x86_64/bin"
 
 # bindkey '\e[3~' delete-char #make del working
 bindkey '^R' history-incremental-search-backward #bind rev-search to ctrl-r

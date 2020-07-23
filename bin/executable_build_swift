@@ -16,11 +16,12 @@ if [[ "${flag}" == "-d" ]]; then
   echo "[BUILD-SWIFT]: Debug build"
   ln -nfs Ninja-RelWithDebInfoAssert+swift-DebugAssert ../build/current
 
-  ./utils/build-script \
+  CC=$HOME/chromium-clang/bin/clang CXX=$HOME/chromium-clang/bin/clang++ ./utils/build-script \
     --release-debuginfo \
-    --debug-swift \
+    --host_cc=$HOME/chromium-clang/bin/clang \
+    --host_cxx=$HOME/chromium-clang/bin/clang++ \
     --force-optimized-typechecker \
-    --extra-cmake-options="-DSWIFT_APPEND_VC_REV:BOOL=false,-DLLVM_APPEND_VC_REV:BOOL=false,-DLLVM_USE_LINKER=lld,-DCMAKE_CXX_FLAGS=-fno-limit-debug-info,-DCMAKE_C_FLAGS=-fno-limit-debug-info" \
+    --extra-cmake-options="-DCMAKE_C_COMPILER=$HOME/chromium-clang/bin/clang,-DCMAKE_CXX_COMPILER=$HOME/chromium-clang/bin/clang++,-DSWIFT_APPEND_VC_REV=Off,-DLLVM_APPEND_VC_REV=Off,-DLLVM_USE_LINKER=lld,-DCMAKE_CXX_FLAGS='-fno-limit-debug-info -fstandalone-debug -glldb -Wno-error=elaborated-enum-base',-DCMAKE_C_FLAGS='-fno-limit-debug-info -fstandalone-debug -glldb',-DCMAKE_BUILD_TYPE=Debug,-DLLVM_USE_SPLIT_DWARF:BOOL=true,-DLLVM_OPTIMIZED_TABLEGEN=ON" \
     --cmake-c-launcher $(which gomacc) \
     --cmake-cxx-launcher $(which gomacc) \
     $@
@@ -28,9 +29,11 @@ else
   echo "[BUILD-SWIFT]: Release build"
   ln -nfs Ninja-ReleaseAssert ../build/current
 
-  ./utils/build-script \
+  CC=$HOME/chromium-clang/bin/clang CXX=$HOME/chromium-clang/bin/clang++ ./utils/build-script \
     --release \
-    --extra-cmake-options="-DSWIFT_APPEND_VC_REV:BOOL=false-DLLVM_APPEND_VC_REV:BOOL=false,-DLLVM_USE_LINKER=lld" \
+    --extra-cmake-options="-DCMAKE_C_COMPILER=$HOME/chromium-clang/bin/clang,-DCMAKE_CXX_COMPILER=$HOME/chromium-clang/bin/clang++,-DSWIFT_APPEND_VC_REV=Off,-DLLVM_APPEND_VC_REV=Off,-DLLVM_USE_LINKER=lld,-DCMAKE_CXX_FLAGS='-Wno-error=elaborated-enum-base'" \
+    --host_cc=$HOME/chromium-clang/bin/clang \
+    --host_cxx=$HOME/chromium-clang/bin/clang++ \
     --cmake-c-launcher $(which gomacc) \
     --cmake-cxx-launcher $(which gomacc) \
     $@
