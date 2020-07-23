@@ -24,6 +24,7 @@ if [[ "${flag}" == "-d" ]]; then
     --extra-cmake-options="-DCMAKE_C_COMPILER=$HOME/chromium-clang/bin/clang,-DCMAKE_CXX_COMPILER=$HOME/chromium-clang/bin/clang++,-DSWIFT_APPEND_VC_REV=Off,-DLLVM_APPEND_VC_REV=Off,-DLLVM_USE_LINKER=lld,-DCMAKE_CXX_FLAGS='-fno-limit-debug-info -fstandalone-debug -glldb -Wno-error=elaborated-enum-base',-DCMAKE_C_FLAGS='-fno-limit-debug-info -fstandalone-debug -glldb',-DCMAKE_BUILD_TYPE=Debug,-DLLVM_USE_SPLIT_DWARF:BOOL=true,-DLLVM_OPTIMIZED_TABLEGEN=ON" \
     --cmake-c-launcher $(which gomacc) \
     --cmake-cxx-launcher $(which gomacc) \
+    --jobs=200 \
     $@
 else
   echo "[BUILD-SWIFT]: Release build"
@@ -36,5 +37,6 @@ else
     --host_cxx=$HOME/chromium-clang/bin/clang++ \
     --cmake-c-launcher $(which gomacc) \
     --cmake-cxx-launcher $(which gomacc) \
+    --jobs=200 \
     $@
 fi
