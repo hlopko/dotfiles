@@ -47,7 +47,7 @@ alias chezmoi='~/go/bin/chezmoi'
 
 hr(){printf '\e[32m-%.0s\e[39m' $(seq $COLUMNS)}
 
-PATH="$PATH:$HOME/.cargo/bin:$HOME/go/bin:$HOME/bin:$HOME/projects/swift/build/current/swift-linux-x86_64/bin"
+export PATH="$PATH:$HOME/.cargo/bin:$HOME/go/bin:$HOME/bin:/google/bin/releases/editor-devtools"
 
 # bindkey '\e[3~' delete-char #make del working
 bindkey '^R' history-incremental-search-backward #bind rev-search to ctrl-r
@@ -143,3 +143,6 @@ fi
 {{ end -}}
 
 [ -f ~/.local_zshrc ] && source ~/.local_zshrc
+
+alias mcd_perflab=/google/data/ro/projects/perflab/release/mcd_perflab.par
+source /etc/bash_completion.d/hgd

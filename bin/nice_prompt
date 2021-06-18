@@ -1,11 +1,34 @@
 autoload -U colors && colors
 setopt PROMPT_SUBST
 
+# Enable Fig prompt information
+source ~/bin/fig_prompt
+
+# Template Arguments:
+#   FIG_PROMPT_MODIFIED: Replaced with $modified
+#   FIG_PROMPT_ADDED: Replaced with $added
+#   FIG_PROMPT_DELETED: Replaced with $deleted
+#   FIG_PROMPT_UNKNOWN: Replaced with $unknown
+#   FIG_PROMPT_UNEXPORTED: Replaced with $unexported
+#   FIG_PROMPT_OBSOLETE: Replaced with $obsolete
+#   FIG_PROMPT_CL: Replaced with $cl
+#   FIG_PROMPT_DESCRIPTION: Replaced with $description
+#   FIG_PROMPT_CHANGENAME: Replaced with $changename
+#   FIG_PROMPT_HAS_SHELVE: Replaced with $has_shelve
+function get_fig_prompt_template() {
+  echo -n "[%{$fg[yellow]%}FIG_PROMPT_MODIFIED %{$fg[green]%}FIG_PROMPT_ADDED"
+  echo -n " %{$fg[red]%}FIG_PROMPT_DELETED %{$fg[magenta]%}FIG_PROMPT_UNKNOWN"
+  echo -n " %{$fg[magenta]%}FIG_PROMPT_HAS_SHELVE %{$fg[white]%}FIG_PROMPT_DESCRIPTION "
+  echo -n " %{$fg[blue]%}FIG_PROMPT_UNEXPORTED %{$fg[red]%}FIG_PROMPT_OBSOLETE"
+  echo -n " %{$fg[white]%}FIG_PROMPT_CL]%{$reset_color%}"
+}
+
 local SMILEY="%(?.%{$fg[yellow]%}:)%{$reset_color%}.%{$fg[red]%}:(%{$reset_color%})"
 local CURRENT_PATH="%{$fg[gray]%}%3c%{$reset_color%}"
 local LAST_CMD_DURATION="$MH_LAST_CMD_DURATION"
 
-PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(hg_prompt) '
+PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(get_fig_prompt) '
+
 function git_prompt {
 	if [ -d .git ] || [ -d ../.git ] || git rev-parse --git-dir &> /dev/null; then
 		local BRANCH=`git rev-parse --abbrev-ref HEAD`
@@ -22,14 +45,4 @@ function ascend {
     fi
     dir="$(dirname $dir)"
   done
-}
-
-function hg_prompt {
-  number_file="$(ascend .fig_cl_number)"
-  desc_file="$(ascend .fig_cl_description)"
-  if [ -f "$number_file" ]; then
-    echo "%{$fg[green]%}(\
-%{$fg[blue]%}http://$(cat "$number_file")%{$fg[green]%} - \
-$(cat "$desc_file")%{$fg[green]%})%{$reset_color%}"
-  fi
 }

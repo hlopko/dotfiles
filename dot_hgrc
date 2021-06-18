@@ -1,6 +1,7 @@
 [ui]
 username = hlopko
 merge = nvimdiff
+ignore = ~/.hgignore
 
 [merge-tools]
 nvimdiff.executable = nvim
@@ -9,14 +10,16 @@ nvimdiff.premerge = keep
 
 [alias]
 borrow = !p4 pack -c $1 | sed "/^\t/s/\t//p ; /^====.*====\$/,\$p ; d" | $HG import -e - -p0
+pc = pickcheckout
+c = commit
 
 [trainingwheels]
-revert--all=false
-merge=false
+revert--all=False
+merge=False
+warn-head-paths=False
 
 [extensions]
 purge =
-figstatus = /google/src/head/depot/google3/experimental/fig_contrib/prompts/fig_status/fig_status.py
 
 [pager]
 ignore = version, log, status
@@ -28,19 +31,24 @@ allowdivergence=True
 presubmit.default-rev=only(., p4head)
 
 [hooks]
-post-pickcheckout = cache_hg_prompt
-post-checkout = cache_hg_prompt
-post-co = cache_hg_prompt
-post-uploadchain = cache_hg_prompt
-post-uc = cache_hg_prompt
-post-rebase = cache_hg_prompt
-post-update = cache_hg_prompt
-post-commit = cache_hg_prompt
-post-tag = cache_hg_prompt
-post-amend = cache_hg_prompt
-post-sync = cache_hg_prompt
-post-evolve = cache_hg_prompt
-post-split = cache_hg_prompt
-post-fold = cache_hg_prompt
 
+[extensions]
+figstatus = ~/bin/fig_status.py
+
+[figstatus]
+# modified_str = 
+# added_str = 
+# deleted_str = 
+# unknown_str = 
+# unexported_str = 
+# obsolete_str = 
+
+[fix]
+# only use if you have rustfmt installed locally:
+rustfmt:command = rustfmt +nightly --config-path=google3/devtools/rust/rustfmt.toml
+# slower, but works for everyone:
+# rustfmt:command = /google/src/head/depot/google3/third_party/unsupported_toolchains/rust/toolchains/nightly/bin/rustfmt  --config-path=google3/devtools/rust/rustfmt.toml
+rustfmt:pattern = set:"**.rs"
+# make lower-priority than the google3format support, when added.
+rustfmt:priority = -100
 
