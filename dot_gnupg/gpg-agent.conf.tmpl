@@ -1,7 +1,11 @@
+{{ if eq .chezmoi.hostname "janko-hrasko" -}}
 enable-ssh-support
+{{ end }}
+
 {{ if eq .chezmoi.hostname "janko-hrasko" -}}
 pinentry-program /usr/bin/pinentry-gnome3
 {{ else -}}
 pinentry-program /usr/bin/pinentry-rofi
 {{ end -}}
+
 extra-socket /home/hlopko/.gnupg/S.gpg-agent.extra

@@ -123,10 +123,10 @@ function fix_capslock() {
   setxkbmap -layout us -option ctrl:nocaps
 }
 work() {
-  {{ if eq .chezmoi.hostname "friendlyarm" "candlekeep"  }}
-    tmux_binary=tmx2
+  {{ if eq .chezmoi.hostname "friendlyarm" "candlekeep" }}
+  tmux_binary=tmx2
   {{ else }}
-    tmux_binary=tmux
+  tmux_binary=tmux
   {{ end }}
   "${tmux_binary} new-session -A -s ${1:-work};
 }
