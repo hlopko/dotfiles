@@ -128,7 +128,7 @@ work() {
   {{ else }}
   tmux_binary=tmux
   {{ end }}
-  "${tmux_binary} new-session -A -s ${1:-work};
+  "${tmux_binary}" new-session -A -s ${1:-work};
 }
 
 {{ if ne .chezmoi.hostname "candlekeep" -}}
