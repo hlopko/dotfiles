@@ -27,7 +27,8 @@ local SMILEY="%(?.%{$fg[yellow]%}:)%{$reset_color%}.%{$fg[red]%}:(%{$reset_color
 local CURRENT_PATH="%{$fg[gray]%}%3c%{$reset_color%}"
 local LAST_CMD_DURATION="$MH_LAST_CMD_DURATION"
 
-PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(get_fig_prompt) '
+# PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(get_fig_prompt) '
+PS1="$SMILEY $CURRENT_PATH"'$(git_prompt) '
 
 function git_prompt {
 	if [ -d .git ] || [ -d ../.git ] || git rev-parse --git-dir &> /dev/null; then

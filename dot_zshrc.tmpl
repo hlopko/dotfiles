@@ -24,10 +24,6 @@ export EDITOR='nvim'
 plugins=(git cargo rust command-not-found github)
 
 alias bazel='bazelisk'
-alias dbazel='cd ~/projects/bazel'
-alias dllvm='cd ~/projects/llvm/llvm-project'
-alias dswift='cd ~/projects/swift/swift'
-alias dbswift='cd ~/projects/swift/build/current/swift-linux-x86_64'
 alias s='git s'
 alias e='exit'
 alias a='git add --all -p'
@@ -41,9 +37,6 @@ alias ll='ls -la'
 alias bz='bazel build //src:bazel -c opt'
 alias bb='blaze build //devtools/blaze -c opt'
 alias bzl='~/projects/bazel/bazel-bin/src/bazel'
-{{ if eq .chezmoi.hostname "hlopko" -}}
-alias chezmoi='~/go/bin/chezmoi'
-{{ end -}}
 
 hr(){printf '\e[32m-%.0s\e[39m' $(seq $COLUMNS)}
 
@@ -129,13 +122,16 @@ export REPORTTIME=3
 function fix_capslock() {
   setxkbmap -layout us -option ctrl:nocaps
 }
-work() { {{ if eq .chezmoi.hostname "hlopko" }}tmx2{{ else }}tmux{{ end }} new-session -A -s ${1:-work}; }
+work() {
+  {{ if eq .chezmoi.hostname "friendlyarm" "candlekeep"  }}
+    tmux_binary=tmx2
+  {{ else }}
+    tmux_binary=tmux
+  {{ end }}
+  "${tmux_binary} new-session -A -s ${1:-work};
+}
 
-{{ if eq .chezmoi.hostname "hlopko" -}}
-source /etc/bash_completion.d/g4d
-{{ end -}}
-
-{{ if ne .chezmoi.hostname "hlopko" -}}
+{{ if ne .chezmoi.hostname "candlekeep" -}}
 if [[ $REMOTEHOST == "localhost" ]]; then
   export SSH_AGENT_PID=""
   export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh"
@@ -144,5 +140,8 @@ fi
 
 [ -f ~/.local_zshrc ] && source ~/.local_zshrc
 
+{{ if eq .chezmoi.hostname "candlekeep"  }}
 alias mcd_perflab=/google/data/ro/projects/perflab/release/mcd_perflab.par
+source /etc/bash_completion.d/g4d
 source /etc/bash_completion.d/hgd
+{{ end }}
