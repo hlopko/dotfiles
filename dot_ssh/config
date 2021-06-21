@@ -1,0 +1,3 @@
+Host candlekeep
+  HostName candlekeep.c.googlers.com
+  user hlopko
