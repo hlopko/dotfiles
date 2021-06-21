@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -euo pipefail
+
+code --force-device-scale-factor=1.5
