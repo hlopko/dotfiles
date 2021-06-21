@@ -1,8 +1,10 @@
 autoload -U colors && colors
 setopt PROMPT_SUBST
 
+{{ if eq .chezmoi.hostname "candlekeep" }}
 # Enable Fig prompt information
-# source ~/bin/fig_prompt
+source ~/bin/fig_prompt
+{{ end }}
 
 # Template Arguments:
 #   FIG_PROMPT_MODIFIED: Replaced with $modified
@@ -27,8 +29,11 @@ local SMILEY="%(?.%{$fg[yellow]%}:)%{$reset_color%}.%{$fg[red]%}:(%{$reset_color
 local CURRENT_PATH="%{$fg[gray]%}%3c%{$reset_color%}"
 local LAST_CMD_DURATION="$MH_LAST_CMD_DURATION"
 
-# PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(get_fig_prompt) '
+{{ if eq .chezmoi.hostname "candlekeep" }}
+PS1="$SMILEY $CURRENT_PATH"'$(git_prompt)$(get_fig_prompt) '
+{{ else }}
 PS1="$SMILEY $CURRENT_PATH"'$(git_prompt) '
+{{ end }}
 
 function git_prompt {
 	if [ -d .git ] || [ -d ../.git ] || git rev-parse --git-dir &> /dev/null; then

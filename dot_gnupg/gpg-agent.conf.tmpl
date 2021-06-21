@@ -1,5 +1,6 @@
-{{ if ne .chezmoi.hostname "friendlyarm" -}}
-
+{{ if eq .chezmoi.hostname "friendlyarm" "candlekeep" -}}
+  # nothing to see there
+{{ else }}
   {{ if eq .chezmoi.hostname "janko-hrasko" -}}
   enable-ssh-support
   {{ end }}
