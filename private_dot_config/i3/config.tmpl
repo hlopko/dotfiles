@@ -156,17 +156,13 @@ bar {
         status_command i3status
 }
 
-for_window [class="displaycal"] floating enable
-
 # lock screen
 bindsym Mod1+Mod4+l exec xsecurelock
 
 exec --no-startup-id compton --opacity-rule '100:window_type = "dock" && class_g = "i3bar"' --config ~/.config/compton.conf -b
 {{ if eq .chezmoi.hostname "friendlyarm" }}
 exec --no-startup-id feh --bg-fill /usr/share/backgrounds/Gwallpaper-pride.png
-exec --no-startup-id /usr/share/goobuntu-indicator/goobuntu_indicator.py)
-exec --no-startup-id gsettings-data-convert
-exec --no-startup-id start-pulseaudio-x11
+exec --no-startup-id dex -ae i3
 {{ else }}
 exec --no-startup-id feh --bg-scale /usr/share/backgrounds/gnome/adwaita-night.jpg
 {{ end }}
