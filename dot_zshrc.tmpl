@@ -37,6 +37,9 @@ alias ll='ls -la'
 alias bz='bazel build //src:bazel -c opt'
 alias bb='blaze build //devtools/blaze -c opt'
 alias bzl='~/projects/bazel/bazel-bin/src/bazel'
+{{ if eq .chezmoi.hostname "friendlyarm" "candlekeep" -}}
+alias copybara='/google/bin/releases/copybara/public/copybara/copybara'
+{{ end -}}
 
 hr(){printf '\e[32m-%.0s\e[39m' $(seq $COLUMNS)}
 
@@ -123,11 +126,11 @@ function fix_capslock() {
   setxkbmap -layout us -option ctrl:nocaps
 }
 work() {
-  {{ if eq .chezmoi.hostname "friendlyarm" "candlekeep" }}
+  {{ if eq .chezmoi.hostname "friendlyarm" "candlekeep" -}}
   tmux_binary=tmx2
-  {{ else }}
+  {{ else -}}
   tmux_binary=tmux
-  {{ end }}
+  {{ end -}}
   "${tmux_binary}" new-session -A -s ${1:-work};
 }
 
@@ -140,8 +143,8 @@ fi
 
 [ -f ~/.local_zshrc ] && source ~/.local_zshrc
 
-{{ if eq .chezmoi.hostname "candlekeep"  }}
+{{ if eq .chezmoi.hostname "candlekeep" -}}
 alias mcd_perflab=/google/data/ro/projects/perflab/release/mcd_perflab.par
 source /etc/bash_completion.d/g4d
 source /etc/bash_completion.d/hgd
-{{ end }}
+{{ end -}}
